@@ -11884,7 +11884,7 @@ const queryString = __webpack_require__(82);
 const tweet_fetcher_1 = __webpack_require__(47);
 const tweet_select_view_1 = __webpack_require__(88);
 const tweet_editor_view_1 = __webpack_require__(89);
-const change_1 = __webpack_require__(178);
+const symbol_string_1 = __webpack_require__(179);
 var Stage;
 (function (Stage) {
     Stage[Stage["Initial"] = 0] = "Initial";
@@ -11909,7 +11909,7 @@ class PersistedState {
         if (isNaN(qs.offset) || Array.from(qs.insertion).length !== 1) {
             return new PersistedState(qs.userId, qs.statusId, undefined, undefined);
         }
-        return new PersistedState(qs.userId, qs.statusId, change_1.SymbolIndex.create(+qs.offset), qs.insertion);
+        return new PersistedState(qs.userId, qs.statusId, symbol_string_1.SymbolIndex.create(+qs.offset), qs.insertion);
     }
     static persist(tweet) {
         const qs = queryString.stringify({
@@ -29668,7 +29668,7 @@ module.exports = jsonp;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const change_1 = __webpack_require__(178);
+const symbol_string_1 = __webpack_require__(179);
 class EditedTweet {
     constructor(userId, statusId, originalText, change) {
         this.userId = userId;
@@ -29677,13 +29677,13 @@ class EditedTweet {
         this.change = change;
     }
     static create(userId, statusId, originalText) {
-        return new EditedTweet(userId, statusId, originalText, undefined);
+        return new EditedTweet(userId, statusId, new symbol_string_1.SymbolString(originalText), undefined);
     }
     get editedText() {
         if (!this.change) {
-            return this.originalText;
+            return this.originalText.text;
         }
-        const tokens = Array.from(this.originalText);
+        const tokens = this.originalText.symbols;
         return tokens.slice(0, this.change.offset.value).join('') + this.change.insertion + tokens.slice(this.change.offset.value + 1).join('');
     }
     toEditedSymbolIndex(charIndex) {
@@ -29692,12 +29692,12 @@ class EditedTweet {
         let symbolIndex = 0;
         for (const char of characters) {
             if (charIndex < currentCharIndex + char.length) {
-                return change_1.SymbolIndex.create(symbolIndex);
+                return symbol_string_1.SymbolIndex.create(symbolIndex);
             }
             currentCharIndex += char.length;
             ++symbolIndex;
         }
-        return change_1.SymbolIndex.create(charIndex);
+        return symbol_string_1.SymbolIndex.create(charIndex);
     }
     get charToSymbolMap() {
         if (!this._charToSymbolMap) {
@@ -29716,7 +29716,7 @@ class EditedTweet {
         return this._charToSymbolMap;
     }
     flipAt(offset, key) {
-        if (Array.from(this.originalText)[offset.value] === key) {
+        if (this.originalText.symbols[offset.value] === key) {
             return new EditedTweet(this.userId, this.statusId, this.originalText, undefined);
         }
         return new EditedTweet(this.userId, this.statusId, this.originalText, {
@@ -29816,7 +29816,7 @@ class TweetDiffInfo extends React.Component {
         if (!tweet.change) {
             return React.createElement("div", null);
         }
-        const oldChar = Array.from(tweet.originalText)[tweet.change.offset.value];
+        const oldChar = tweet.originalText.symbols[tweet.change.offset.value];
         const newChar = tweet.change.insertion;
         return (React.createElement("div", { className: 'tweet-diff-info' },
             React.createElement("div", null,
@@ -43173,7 +43173,8 @@ function getRangeBoundingClientRect(range) {
 module.exports = getRangeBoundingClientRect;
 
 /***/ }),
-/* 178 */
+/* 178 */,
+/* 179 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -43188,6 +43189,14 @@ class SymbolIndex {
     }
 }
 exports.SymbolIndex = SymbolIndex;
+class SymbolString {
+    constructor(text) {
+        this.text = text;
+        this.symbols = Array.from(text);
+        this.characters = text.split('');
+    }
+}
+exports.SymbolString = SymbolString;
 
 
 /***/ })

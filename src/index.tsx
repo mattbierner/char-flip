@@ -6,7 +6,7 @@ import { fetchTweet } from './tweet_fetcher'
 import { EditedTweet } from './edited_tweet';
 import { TweetSelectView } from './tweet_select_view';
 import { TweetEditorView } from './tweet_editor_view';
-import { SymbolIndex } from './change';
+import { SymbolIndex } from './symbol_string';
 
 enum Stage {
     Initial,

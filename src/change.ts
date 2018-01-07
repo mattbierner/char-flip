@@ -1,12 +1,4 @@
-export class SymbolIndex {
-    public static create(value: number) {
-        return new SymbolIndex(value)
-    }
-
-    private constructor(
-        public readonly value: number
-    ) { }
-}
+import { SymbolIndex } from "./symbol_string";
 
 export interface Change {
     /**

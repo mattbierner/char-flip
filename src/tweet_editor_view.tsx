@@ -11,7 +11,7 @@ class TweetDiffInfo extends React.Component<{ tweet: EditedTweet }> {
             return <div></div>
         }
 
-        const oldChar = Array.from(tweet.originalText)[tweet.change.offset.value]
+        const oldChar = tweet.originalText.symbols[tweet.change.offset.value]
         const newChar = tweet.change.insertion
         return (
             <div className='tweet-diff-info'>

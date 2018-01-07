@@ -1,4 +1,5 @@
-import { Change, SymbolIndex } from './change'
+import { Change } from './change'
+import { SymbolIndex, SymbolString } from './symbol_string';
 
 export class EditedTweet {
     private _charToSymbolMap?: number[]
@@ -11,7 +12,7 @@ export class EditedTweet {
         return new EditedTweet(
             userId,
             statusId,
-            originalText,
+            new SymbolString(originalText),
             undefined
         )
     }
@@ -19,15 +20,15 @@ export class EditedTweet {
     private constructor(
         public readonly userId: string,
         public readonly statusId: string,
-        public readonly originalText: string,
+        public readonly originalText: SymbolString,
         public readonly change: Change | undefined
     ) { }
 
     public get editedText(): string {
         if (!this.change) {
-            return this.originalText
+            return this.originalText.text
         }
-        const tokens = Array.from(this.originalText)
+        const tokens = this.originalText.symbols
         return tokens.slice(0, this.change.offset.value).join('') + this.change.insertion + tokens.slice(this.change.offset.value + 1).join('')
     }
 
@@ -64,7 +65,7 @@ export class EditedTweet {
     }
 
     public flipAt(offset: SymbolIndex, key: string): EditedTweet {
-        if (Array.from(this.originalText)[offset.value] === key) {
+        if (this.originalText.symbols[offset.value] === key) {
             return new EditedTweet(this.userId, this.statusId, this.originalText, undefined)
         }
 
