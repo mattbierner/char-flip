@@ -29685,19 +29685,6 @@ class EditedTweet {
         }
         return this.originalText.replaceSymbolAt(this.change.offset, this.change.insertion);
     }
-    toEditedSymbolIndex(charIndex) {
-        const characters = this.editedText.symbols;
-        let currentCharIndex = 0;
-        let symbolIndex = 0;
-        for (const char of characters) {
-            if (charIndex < currentCharIndex + char.length) {
-                return symbol_string_1.SymbolIndex.create(symbolIndex);
-            }
-            currentCharIndex += char.length;
-            ++symbolIndex;
-        }
-        return symbol_string_1.SymbolIndex.create(charIndex);
-    }
     get charToSymbolMap() {
         if (!this._charToSymbolMap) {
             // Hacky: We operate on symbols while js splits unicode/emoji
@@ -30028,7 +30015,7 @@ class TweetEditor extends React.Component {
             return 'handled';
         }
         const selection = editorState.getSelection();
-        const offset = this.props.tweet.toEditedSymbolIndex(selection.getStartOffset());
+        const offset = this.props.tweet.editedText.toSymbolIndex(selection.getStartOffset());
         const edited = this.props.tweet.flipAt(offset, chars);
         const newState = draft_js_1.EditorState.acceptSelection(draft_js_1.EditorState.createWithContent(this.newContentForEdited(edited, selection)), selection);
         this.setState({ editorState: newState });
@@ -30038,7 +30025,7 @@ class TweetEditor extends React.Component {
     handleKeyCommand(command, editorState) {
         if (command === 'backspace') {
             const selection = editorState.getSelection();
-            if (this.props.tweet.change && this.props.tweet.toEditedSymbolIndex(selection.getStartOffset()).value === this.props.tweet.change.offset.value) {
+            if (this.props.tweet.change && this.props.tweet.editedText.toSymbolIndex(selection.getStartOffset()).value === this.props.tweet.change.offset.value) {
                 const editedTweet = this.props.tweet.reset();
                 const selection = editorState.getSelection();
                 const newState = draft_js_1.EditorState.acceptSelection(draft_js_1.EditorState.createWithContent(this.newContentForEdited(editedTweet, selection)), selection);
@@ -43196,6 +43183,19 @@ class SymbolString {
     }
     replaceSymbolAt(index, newSymbol) {
         return new SymbolString(this.symbols.slice(0, index.value).join('') + newSymbol + this.symbols.slice(index.value + 1).join(''));
+    }
+    toSymbolIndex(charIndex) {
+        const characters = this.symbols;
+        let currentCharIndex = 0;
+        let symbolIndex = 0;
+        for (const char of characters) {
+            if (charIndex < currentCharIndex + char.length) {
+                return SymbolIndex.create(symbolIndex);
+            }
+            currentCharIndex += char.length;
+            ++symbolIndex;
+        }
+        return SymbolIndex.create(charIndex);
     }
 }
 exports.SymbolString = SymbolString;

@@ -31,21 +31,6 @@ export class EditedTweet {
         return this.originalText.replaceSymbolAt(this.change.offset, this.change.insertion)
     }
 
-    public toEditedSymbolIndex(charIndex: number): SymbolIndex {
-        const characters = this.editedText.symbols
-        let currentCharIndex = 0
-        let symbolIndex = 0
-        for (const char of characters) {
-            if (charIndex < currentCharIndex + char.length) {
-                return SymbolIndex.create(symbolIndex)
-            }
-            currentCharIndex += char.length
-            ++symbolIndex
-        }
-
-        return SymbolIndex.create(charIndex)
-    }
-
     public get charToSymbolMap(): number[] {
         if (!this._charToSymbolMap) {
             // Hacky: We operate on symbols while js splits unicode/emoji

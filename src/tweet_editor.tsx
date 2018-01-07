@@ -75,7 +75,7 @@ export class TweetEditor extends React.Component<TweetProps, TweetState> {
         }
 
         const selection = editorState.getSelection()
-        const offset = this.props.tweet.toEditedSymbolIndex(selection.getStartOffset())
+        const offset = this.props.tweet.editedText.toSymbolIndex(selection.getStartOffset())
         const edited = this.props.tweet.flipAt(offset, chars)
 
         const newState = EditorState.acceptSelection(
@@ -91,7 +91,7 @@ export class TweetEditor extends React.Component<TweetProps, TweetState> {
     private handleKeyCommand(command: string, editorState: EditorState): 'not-handled' | 'handled' {
         if (command === 'backspace') {
             const selection = editorState.getSelection()
-            if (this.props.tweet.change && this.props.tweet.toEditedSymbolIndex(selection.getStartOffset()).value === this.props.tweet.change.offset.value) {
+            if (this.props.tweet.change && this.props.tweet.editedText.toSymbolIndex(selection.getStartOffset()).value === this.props.tweet.change.offset.value) {
                 const editedTweet = this.props.tweet.reset()
 
                 const selection = editorState.getSelection()

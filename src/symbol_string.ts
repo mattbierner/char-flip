@@ -23,4 +23,19 @@ export class SymbolString {
         return new SymbolString(
             this.symbols.slice(0, index.value).join('') + newSymbol + this.symbols.slice(index.value + 1).join(''))
     }
+
+    public toSymbolIndex(charIndex: number): SymbolIndex {
+        const characters = this.symbols
+        let currentCharIndex = 0
+        let symbolIndex = 0
+        for (const char of characters) {
+            if (charIndex < currentCharIndex + char.length) {
+                return SymbolIndex.create(symbolIndex)
+            }
+            currentCharIndex += char.length
+            ++symbolIndex
+        }
+
+        return SymbolIndex.create(charIndex)
+    }
 }
