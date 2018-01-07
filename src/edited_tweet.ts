@@ -28,8 +28,7 @@ export class EditedTweet {
         if (!this.change) {
             return this.originalText.text
         }
-        const tokens = this.originalText.symbols
-        return tokens.slice(0, this.change.offset.value).join('') + this.change.insertion + tokens.slice(this.change.offset.value + 1).join('')
+        return this.originalText.replaceSymbolAt(this.change.offset, this.change.insertion).text
     }
 
     public toEditedSymbolIndex(charIndex: number): SymbolIndex {

@@ -29683,8 +29683,7 @@ class EditedTweet {
         if (!this.change) {
             return this.originalText.text;
         }
-        const tokens = this.originalText.symbols;
-        return tokens.slice(0, this.change.offset.value).join('') + this.change.insertion + tokens.slice(this.change.offset.value + 1).join('');
+        return this.originalText.replaceSymbolAt(this.change.offset, this.change.insertion).text;
     }
     toEditedSymbolIndex(charIndex) {
         const characters = Array.from(this.editedText);
@@ -43194,6 +43193,9 @@ class SymbolString {
         this.text = text;
         this.symbols = Array.from(text);
         this.characters = text.split('');
+    }
+    replaceSymbolAt(index, newSymbol) {
+        return new SymbolString(this.symbols.slice(0, index.value).join('') + newSymbol + this.symbols.slice(index.value + 1).join(''));
     }
 }
 exports.SymbolString = SymbolString;
