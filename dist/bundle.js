@@ -30012,11 +30012,16 @@ class TweetEditor extends React.Component {
     }
     render() {
         return (React.createElement("div", { className: 'editable-tweet' },
-            React.createElement(draft_js_1.Editor, { editorState: this.state.editorState, onChange: s => this.onChange(s), handleBeforeInput: (chars, state) => this.handleBeforeInput(chars, state), handleKeyCommand: (command, state) => this.handleKeyCommand(command, state), handleDrop: () => 'handled', handlePastedText: (text, _, state) => this.handleBeforeInput(text, state), customStyleMap: styleMap })));
+            React.createElement(draft_js_1.Editor, { editorState: this.state.editorState, onChange: s => this.onChange(s), onEscape: () => this.onEscape(), handleBeforeInput: (chars, state) => this.handleBeforeInput(chars, state), handleKeyCommand: (command, state) => this.handleKeyCommand(command, state), handleDrop: () => 'handled', handlePastedText: (text, _, state) => this.handleBeforeInput(text, state), customStyleMap: styleMap })));
     }
     onChange(editorState) {
         const selection = editorState.getSelection();
         const newState = draft_js_1.EditorState.acceptSelection(draft_js_1.EditorState.createWithContent(this.newContentForEdited(this.props.tweet, selection)), selection);
+        this.setState({ editorState: newState });
+    }
+    onEscape() {
+        // Clear selection marker
+        const newState = draft_js_1.EditorState.acceptSelection(draft_js_1.EditorState.createWithContent(this.newContentForEdited(this.props.tweet)), draft_js_1.SelectionState.createEmpty('key'));
         this.setState({ editorState: newState });
     }
     handleBeforeInput(chars, editorState) {

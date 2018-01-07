@@ -40,6 +40,7 @@ export class TweetEditor extends React.Component<TweetProps, TweetState> {
                 <Editor
                     editorState={this.state.editorState}
                     onChange={s => this.onChange(s)}
+                    onEscape={() => this.onEscape()}
                     handleBeforeInput={(chars, state) => this.handleBeforeInput(chars, state)}
                     handleKeyCommand={(command, state) => this.handleKeyCommand(command, state)}
                     handleDrop={() => 'handled'}
@@ -55,6 +56,15 @@ export class TweetEditor extends React.Component<TweetProps, TweetState> {
         const newState = EditorState.acceptSelection(
             EditorState.createWithContent(this.newContentForEdited(this.props.tweet, selection)),
             selection)
+
+        this.setState({ editorState: newState })
+    }
+
+    private onEscape(): void {
+        // Clear selection marker
+        const newState = EditorState.acceptSelection(
+            EditorState.createWithContent(this.newContentForEdited(this.props.tweet)),
+            SelectionState.createEmpty('key'))
 
         this.setState({ editorState: newState })
     }
