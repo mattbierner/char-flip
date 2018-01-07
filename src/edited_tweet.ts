@@ -1,4 +1,4 @@
-import { Change } from './change'
+import { Change, SymbolIndex } from './change'
 
 export class EditedTweet {
     private _charToSymbolMap?: number[]
@@ -28,7 +28,22 @@ export class EditedTweet {
             return this.originalText
         }
         const tokens = Array.from(this.originalText)
-        return tokens.slice(0, this.change.offset).join('') + this.change.insertion + tokens.slice(this.change.offset + 1).join('')
+        return tokens.slice(0, this.change.offset.value).join('') + this.change.insertion + tokens.slice(this.change.offset.value + 1).join('')
+    }
+
+    public toEditedSymbolIndex(charIndex: number): SymbolIndex {
+        const characters = Array.from(this.editedText)
+        let currentCharIndex = 0
+        let symbolIndex = 0
+        for (const char of characters) {
+            if (charIndex < currentCharIndex + char.length) {
+                return SymbolIndex.create(symbolIndex)
+            }
+            currentCharIndex += char.length
+            ++symbolIndex
+        }
+
+        return SymbolIndex.create(charIndex)
     }
 
     public get charToSymbolMap(): number[] {
@@ -48,8 +63,8 @@ export class EditedTweet {
         return this._charToSymbolMap;
     }
 
-    public flipAt(offset: number, key: string): EditedTweet {
-        if (this.originalText[offset] === key) {
+    public flipAt(offset: SymbolIndex, key: string): EditedTweet {
+        if (Array.from(this.originalText)[offset.value] === key) {
             return new EditedTweet(this.userId, this.statusId, this.originalText, undefined)
         }
 

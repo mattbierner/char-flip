@@ -6,6 +6,7 @@ import { fetchTweet } from './tweet_fetcher'
 import { EditedTweet } from './edited_tweet';
 import { TweetSelectView } from './tweet_select_view';
 import { TweetEditorView } from './tweet_editor_view';
+import { SymbolIndex } from './change';
 
 enum Stage {
     Initial,
@@ -19,7 +20,7 @@ class PersistedState {
     private constructor(
         public readonly userId: string,
         public readonly statusId: string,
-        public readonly offset: number | undefined,
+        public readonly offset: SymbolIndex | undefined,
         public readonly insertion: string | undefined
     ) { }
 
@@ -33,10 +34,18 @@ class PersistedState {
             return undefined
         }
 
+        if (isNaN(qs.offset) || Array.from(qs.insertion).length !== 1) {
+            return new PersistedState(
+                qs.userId,
+                qs.statusId,
+                undefined,
+                undefined)
+        }
+
         return new PersistedState(
             qs.userId,
             qs.statusId,
-            isNaN(qs.offset) ? undefined : +qs.offset,
+            SymbolIndex.create(+qs.offset),
             qs.insertion
         )
     }
@@ -46,7 +55,7 @@ class PersistedState {
             version: PersistedState.currentVersion,
             userId: tweet.userId,
             statusId: tweet.statusId,
-            offset: tweet.change ? tweet.change.offset : undefined,
+            offset: tweet.change ? tweet.change.offset.value : undefined,
             insertion: tweet.change ? tweet.change.insertion : undefined
         })
 

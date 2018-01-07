@@ -11884,6 +11884,7 @@ const queryString = __webpack_require__(82);
 const tweet_fetcher_1 = __webpack_require__(47);
 const tweet_select_view_1 = __webpack_require__(88);
 const tweet_editor_view_1 = __webpack_require__(89);
+const change_1 = __webpack_require__(178);
 var Stage;
 (function (Stage) {
     Stage[Stage["Initial"] = 0] = "Initial";
@@ -11905,14 +11906,17 @@ class PersistedState {
         if (+qs.version !== PersistedState.currentVersion) {
             return undefined;
         }
-        return new PersistedState(qs.userId, qs.statusId, isNaN(qs.offset) ? undefined : +qs.offset, qs.insertion);
+        if (isNaN(qs.offset) || Array.from(qs.insertion).length !== 1) {
+            return new PersistedState(qs.userId, qs.statusId, undefined, undefined);
+        }
+        return new PersistedState(qs.userId, qs.statusId, change_1.SymbolIndex.create(+qs.offset), qs.insertion);
     }
     static persist(tweet) {
         const qs = queryString.stringify({
             version: PersistedState.currentVersion,
             userId: tweet.userId,
             statusId: tweet.statusId,
-            offset: tweet.change ? tweet.change.offset : undefined,
+            offset: tweet.change ? tweet.change.offset.value : undefined,
             insertion: tweet.change ? tweet.change.insertion : undefined
         });
         history.replaceState(null, '', window.location.pathname + '?' + qs);
@@ -29664,6 +29668,7 @@ module.exports = jsonp;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const change_1 = __webpack_require__(178);
 class EditedTweet {
     constructor(userId, statusId, originalText, change) {
         this.userId = userId;
@@ -29679,7 +29684,20 @@ class EditedTweet {
             return this.originalText;
         }
         const tokens = Array.from(this.originalText);
-        return tokens.slice(0, this.change.offset).join('') + this.change.insertion + tokens.slice(this.change.offset + 1).join('');
+        return tokens.slice(0, this.change.offset.value).join('') + this.change.insertion + tokens.slice(this.change.offset.value + 1).join('');
+    }
+    toEditedSymbolIndex(charIndex) {
+        const characters = Array.from(this.editedText);
+        let currentCharIndex = 0;
+        let symbolIndex = 0;
+        for (const char of characters) {
+            if (charIndex < currentCharIndex + char.length) {
+                return change_1.SymbolIndex.create(symbolIndex);
+            }
+            currentCharIndex += char.length;
+            ++symbolIndex;
+        }
+        return change_1.SymbolIndex.create(charIndex);
     }
     get charToSymbolMap() {
         if (!this._charToSymbolMap) {
@@ -29698,7 +29716,7 @@ class EditedTweet {
         return this._charToSymbolMap;
     }
     flipAt(offset, key) {
-        if (this.originalText[offset] === key) {
+        if (Array.from(this.originalText)[offset.value] === key) {
             return new EditedTweet(this.userId, this.statusId, this.originalText, undefined);
         }
         return new EditedTweet(this.userId, this.statusId, this.originalText, {
@@ -29798,7 +29816,7 @@ class TweetDiffInfo extends React.Component {
         if (!tweet.change) {
             return React.createElement("div", null);
         }
-        const oldChar = tweet.originalText[tweet.change.offset];
+        const oldChar = Array.from(tweet.originalText)[tweet.change.offset.value];
         const newChar = tweet.change.insertion;
         return (React.createElement("div", { className: 'tweet-diff-info' },
             React.createElement("div", null,
@@ -29806,7 +29824,7 @@ class TweetDiffInfo extends React.Component {
                 " --> ",
                 React.createElement("span", { className: 'diff-char' }, newChar)),
             React.createElement("div", null,
-                React.createElement("span", null, tweet.change.offset))));
+                React.createElement("span", null, tweet.change.offset.value))));
     }
 }
 class Controls extends React.Component {
@@ -30006,7 +30024,7 @@ class TweetEditor extends React.Component {
             return 'handled';
         }
         const selection = editorState.getSelection();
-        const offset = selection.getStartOffset();
+        const offset = this.props.tweet.toEditedSymbolIndex(selection.getStartOffset());
         const edited = this.props.tweet.flipAt(offset, chars);
         const newState = draft_js_1.EditorState.acceptSelection(draft_js_1.EditorState.createWithContent(this.newContentForEdited(edited, selection)), selection);
         this.setState({ editorState: newState });
@@ -30016,7 +30034,7 @@ class TweetEditor extends React.Component {
     handleKeyCommand(command, editorState) {
         if (command === 'backspace') {
             const selection = editorState.getSelection();
-            if (this.props.tweet.change && selection.getStartOffset() === this.props.tweet.change.offset) {
+            if (this.props.tweet.change && this.props.tweet.toEditedSymbolIndex(selection.getStartOffset()).value === this.props.tweet.change.offset.value) {
                 const editedTweet = this.props.tweet.reset();
                 const selection = editorState.getSelection();
                 const newState = draft_js_1.EditorState.acceptSelection(draft_js_1.EditorState.createWithContent(this.newContentForEdited(editedTweet, selection)), selection);
@@ -30040,7 +30058,7 @@ class TweetEditor extends React.Component {
         const selectedAndChanged = immutable.OrderedSet(['selected', 'changed']);
         const characterList = immutable.List(edited.editedText.split('').map((_, i) => {
             const s = !!selection && isAtIndex(i, selection.getStartOffset());
-            const c = !!edited.change && isAtIndex(i, edited.change.offset);
+            const c = !!edited.change && isAtIndex(i, edited.change.offset.value);
             return draft_js_1.CharacterMetadata.create({
                 style: s
                     ? (c ? selectedAndChanged : selected)
@@ -43148,6 +43166,24 @@ function getRangeBoundingClientRect(range) {
 }
 
 module.exports = getRangeBoundingClientRect;
+
+/***/ }),
+/* 178 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+class SymbolIndex {
+    constructor(value) {
+        this.value = value;
+    }
+    static create(value) {
+        return new SymbolIndex(value);
+    }
+}
+exports.SymbolIndex = SymbolIndex;
+
 
 /***/ })
 /******/ ]);

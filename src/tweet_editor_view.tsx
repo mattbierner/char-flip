@@ -11,7 +11,7 @@ class TweetDiffInfo extends React.Component<{ tweet: EditedTweet }> {
             return <div></div>
         }
 
-        const oldChar = tweet.originalText[tweet.change.offset]
+        const oldChar = Array.from(tweet.originalText)[tweet.change.offset.value]
         const newChar = tweet.change.insertion
         return (
             <div className='tweet-diff-info'>
@@ -19,7 +19,7 @@ class TweetDiffInfo extends React.Component<{ tweet: EditedTweet }> {
                     <span className='diff-char'>{oldChar}</span> --> <span className='diff-char'>{newChar}</span>
                 </div>
                 <div>
-                    <span>{tweet.change.offset}</span>
+                    <span>{tweet.change.offset.value}</span>
                 </div>
             </div>
         )
