@@ -1,0 +1,23 @@
+header {
+    margin-bottom: 2.5em;
+}
+
+header img {
+    max-width: 100%;
+}
+
+header nav {
+    display: flex;
+    justify-content: center;
+}
+
+header nav a {
+    display: block;
+    padding: 0 1em;
+}
+
+@media (max-width: 1000px) {
+    header {
+        margin-bottom: 1.5em;
+    }
+}

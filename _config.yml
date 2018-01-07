@@ -1,0 +1,11 @@
+exclude:
+    - Gemfile
+    - Gemfile.lock
+    - LICENSE
+    - README.md
+    - CNAME
+    - support
+    - webpack.config.js
+    - node_modules
+    - package.json
+    - package.lock.json

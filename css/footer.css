@@ -1,0 +1,17 @@
+#site-footer {
+    background: #d63434;
+    color: rgba(255, 255, 255, 0.6);
+
+    font-size: 12px;
+    padding-top: 0em;
+    padding-bottom: 2em;
+    margin-top: 6em;
+}
+
+#site-footer a {
+    color: rgba(255, 255, 255, 0.6)
+}
+
+#site-footer #copyright {
+    padding-top: 0.8em;
+}

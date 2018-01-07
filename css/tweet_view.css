@@ -1,0 +1,9 @@
+.tweet-diff-info .diff-char {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    vertical-align: middle;
+    border-radius: 100px;
+    background: #ccc;
+}
