@@ -29681,12 +29681,12 @@ class EditedTweet {
     }
     get editedText() {
         if (!this.change) {
-            return this.originalText.text;
+            return this.originalText;
         }
-        return this.originalText.replaceSymbolAt(this.change.offset, this.change.insertion).text;
+        return this.originalText.replaceSymbolAt(this.change.offset, this.change.insertion);
     }
     toEditedSymbolIndex(charIndex) {
-        const characters = Array.from(this.editedText);
+        const characters = this.editedText.symbols;
         let currentCharIndex = 0;
         let symbolIndex = 0;
         for (const char of characters) {
@@ -29702,7 +29702,7 @@ class EditedTweet {
         if (!this._charToSymbolMap) {
             // Hacky: We operate on symbols while js splits unicode/emoji
             // Create mapping between these
-            this._charToSymbolMap = Array.from(this.editedText)
+            this._charToSymbolMap = this.editedText.symbols
                 .reduce((p, text) => {
                 const split = text.split('');
                 p.sum.push(...split.map(() => p.offset));
@@ -30060,7 +30060,7 @@ class TweetEditor extends React.Component {
         const selected = immutable.OrderedSet(['selected']);
         const changed = immutable.OrderedSet(['changed']);
         const selectedAndChanged = immutable.OrderedSet(['selected', 'changed']);
-        const characterList = immutable.List(edited.editedText.split('').map((_, i) => {
+        const characterList = immutable.List(edited.editedText.characters.map((_, i) => {
             const s = !!selection && isAtIndex(i, selection.getStartOffset());
             const c = !!edited.change && isAtIndex(i, edited.change.offset.value);
             return draft_js_1.CharacterMetadata.create({
@@ -30069,7 +30069,7 @@ class TweetEditor extends React.Component {
                     : (c ? changed : empty)
             });
         }));
-        const block = new draft_js_1.ContentBlock().set('text', edited.editedText)
+        const block = new draft_js_1.ContentBlock().set('text', edited.editedText.text)
             .set('key', 'root')
             .set('type', 'unstyled')
             .set('characterList', characterList);

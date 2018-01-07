@@ -120,7 +120,7 @@ export class TweetEditor extends React.Component<TweetProps, TweetState> {
         const changed = immutable.OrderedSet(['changed'])
         const selectedAndChanged = immutable.OrderedSet(['selected', 'changed'])
 
-        const characterList = immutable.List(edited.editedText.split('').map((_, i) => {
+        const characterList = immutable.List(edited.editedText.characters.map((_, i) => {
             const s = !!selection && isAtIndex(i, selection.getStartOffset())
             const c = !!edited.change && isAtIndex(i, edited.change.offset.value)
             return CharacterMetadata.create({
@@ -130,7 +130,7 @@ export class TweetEditor extends React.Component<TweetProps, TweetState> {
             })
         }))
 
-        const block = new ContentBlock().set('text', edited.editedText)
+        const block = new ContentBlock().set('text', edited.editedText.text)
             .set('key', 'root')
             .set('type', 'unstyled')
             .set('characterList', characterList) as ContentBlock;

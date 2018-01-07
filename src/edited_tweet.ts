@@ -24,15 +24,15 @@ export class EditedTweet {
         public readonly change: Change | undefined
     ) { }
 
-    public get editedText(): string {
+    public get editedText(): SymbolString {
         if (!this.change) {
-            return this.originalText.text
+            return this.originalText
         }
-        return this.originalText.replaceSymbolAt(this.change.offset, this.change.insertion).text
+        return this.originalText.replaceSymbolAt(this.change.offset, this.change.insertion)
     }
 
     public toEditedSymbolIndex(charIndex: number): SymbolIndex {
-        const characters = Array.from(this.editedText)
+        const characters = this.editedText.symbols
         let currentCharIndex = 0
         let symbolIndex = 0
         for (const char of characters) {
@@ -50,7 +50,7 @@ export class EditedTweet {
         if (!this._charToSymbolMap) {
             // Hacky: We operate on symbols while js splits unicode/emoji
             // Create mapping between these
-            this._charToSymbolMap = Array.from(this.editedText)
+            this._charToSymbolMap = this.editedText.symbols
                 .reduce((p, text) => {
                     const split = text.split('')
                     p.sum.push(...split.map(() => p.offset))
