@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { fetchTweet } from './tweet_fetcher'
-import { EditedTweet } from './edited_tweet';
+import { EditedTweet } from './tweet';
 
 const exampleTweet = 'https://twitter.com/realDonaldTrump/status/949070800417640454'
 

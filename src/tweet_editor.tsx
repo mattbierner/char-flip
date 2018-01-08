@@ -2,7 +2,7 @@ import * as React from 'react'
 import * as immutable from 'immutable'
 import { Editor, EditorState, ContentState, SelectionState, ContentBlock, CharacterMetadata } from 'draft-js'
 
-import { EditedTweet } from './edited_tweet'
+import { EditedTweet } from './tweet'
 
 
 interface TweetProps {

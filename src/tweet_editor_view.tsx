@@ -1,7 +1,7 @@
 import * as React from 'react'
 const copy = require('copy-to-clipboard')
 
-import { EditedTweet } from './edited_tweet';
+import { EditedTweet } from './tweet';
 import { TweetEditor } from './tweet_editor';
 
 class TweetDiffInfo extends React.Component<{ tweet: EditedTweet }> {

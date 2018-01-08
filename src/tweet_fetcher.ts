@@ -1,7 +1,7 @@
 const jsonp = require('jsonp-promise')
 const buildUrl = require('build-url')
 
-import { EditedTweet, TweetMetadata } from './edited_tweet'
+import { EditedTweet, TweetMetadata } from './tweet'
 
 const getTweetUrl = (userId: string, statusId: string): string | null => {
     if (!statusId.match(/^\d+$/)) {

@@ -9021,7 +9021,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsonp = __webpack_require__(85);
 const buildUrl = __webpack_require__(86);
-const edited_tweet_1 = __webpack_require__(87);
+const tweet_1 = __webpack_require__(180);
 const getTweetUrl = (userId, statusId) => {
     if (!statusId.match(/^\d+$/)) {
         return null;
@@ -9077,7 +9077,7 @@ const fetchTweetContent = (authorId, statusId) => __awaiter(this, void 0, void 0
 });
 exports.fetchTweet = (authorId, statusId) => __awaiter(this, void 0, void 0, function* () {
     const content = yield fetchTweetContent(authorId, statusId);
-    return edited_tweet_1.EditedTweet.create(content.metadata, content.text);
+    return tweet_1.EditedTweet.create(content.metadata, content.text);
 });
 
 
@@ -29678,64 +29678,7 @@ module.exports = jsonp;
 
 
 /***/ }),
-/* 87 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const symbol_string_1 = __webpack_require__(179);
-class EditedTweet {
-    constructor(metadata, originalText, change) {
-        this.metadata = metadata;
-        this.originalText = originalText;
-        this.change = change;
-    }
-    static create(metadata, text) {
-        return new EditedTweet(metadata, new symbol_string_1.SymbolString(text), undefined);
-    }
-    get editedText() {
-        if (!this.change) {
-            return this.originalText;
-        }
-        return this.originalText.replaceSymbolAt(this.change.offset, this.change.insertion);
-    }
-    get charToSymbolMap() {
-        if (!this._charToSymbolMap) {
-            // Hacky: We operate on symbols while js splits unicode/emoji
-            // Create mapping between these
-            this._charToSymbolMap = this.editedText.symbols
-                .reduce((p, text) => {
-                const split = text.split('');
-                p.sum.push(...split.map(() => p.offset));
-                return {
-                    offset: p.offset += split.length,
-                    sum: p.sum
-                };
-            }, { offset: 0, sum: [] }).sum;
-        }
-        return this._charToSymbolMap;
-    }
-    flipAt(offset, key) {
-        if (this.originalText.symbols[offset.value] === key) {
-            return new EditedTweet(this.metadata, this.originalText, undefined);
-        }
-        return new EditedTweet(this.metadata, this.originalText, {
-            offset,
-            insertion: key
-        });
-    }
-    reset() {
-        if (!this.change) {
-            return this;
-        }
-        return new EditedTweet(this.metadata, this.originalText, undefined);
-    }
-}
-exports.EditedTweet = EditedTweet;
-
-
-/***/ }),
+/* 87 */,
 /* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -43218,6 +43161,64 @@ class SymbolString {
     }
 }
 exports.SymbolString = SymbolString;
+
+
+/***/ }),
+/* 180 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const symbol_string_1 = __webpack_require__(179);
+class EditedTweet {
+    constructor(metadata, originalText, change) {
+        this.metadata = metadata;
+        this.originalText = originalText;
+        this.change = change;
+    }
+    static create(metadata, text) {
+        return new EditedTweet(metadata, new symbol_string_1.SymbolString(text), undefined);
+    }
+    get editedText() {
+        if (!this.change) {
+            return this.originalText;
+        }
+        return this.originalText.replaceSymbolAt(this.change.offset, this.change.insertion);
+    }
+    get charToSymbolMap() {
+        if (!this._charToSymbolMap) {
+            // Hacky: We operate on symbols while js splits unicode/emoji
+            // Create mapping between these
+            this._charToSymbolMap = this.editedText.symbols
+                .reduce((p, text) => {
+                const split = text.split('');
+                p.sum.push(...split.map(() => p.offset));
+                return {
+                    offset: p.offset += split.length,
+                    sum: p.sum
+                };
+            }, { offset: 0, sum: [] }).sum;
+        }
+        return this._charToSymbolMap;
+    }
+    flipAt(offset, key) {
+        if (this.originalText.symbols[offset.value] === key) {
+            return new EditedTweet(this.metadata, this.originalText, undefined);
+        }
+        return new EditedTweet(this.metadata, this.originalText, {
+            offset,
+            insertion: key
+        });
+    }
+    reset() {
+        if (!this.change) {
+            return this;
+        }
+        return new EditedTweet(this.metadata, this.originalText, undefined);
+    }
+}
+exports.EditedTweet = EditedTweet;
 
 
 /***/ })
