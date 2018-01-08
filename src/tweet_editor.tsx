@@ -34,12 +34,18 @@ export class TweetEditor extends React.Component<TweetProps, TweetState> {
         }
     }
 
+    componentWillReceiveProps(newProps: TweetProps) {
+        if (newProps.tweet !== this.props.tweet) {
+            this.onChange(newProps.tweet, this.state.editorState)
+        }
+    }
+
     render() {
         return (
             <div className='editable-tweet'>
                 <Editor
                     editorState={this.state.editorState}
-                    onChange={s => this.onChange(s)}
+                    onChange={s => this.onChange(this.props.tweet, s)}
                     onEscape={() => this.onEscape()}
                     handleBeforeInput={(chars, state) => this.handleBeforeInput(chars, state)}
                     handleKeyCommand={(command, state) => this.handleKeyCommand(command, state)}
@@ -50,11 +56,11 @@ export class TweetEditor extends React.Component<TweetProps, TweetState> {
         )
     }
 
-    private onChange(editorState: EditorState): void {
+    private onChange(tweet: Tweet, editorState: EditorState): void {
         const selection = editorState.getSelection()
 
         const newState = EditorState.acceptSelection(
-            EditorState.createWithContent(this.newContentForEdited(this.props.tweet, selection)),
+            EditorState.createWithContent(this.newContentForEdited(tweet, selection)),
             selection)
 
         this.setState({ editorState: newState })

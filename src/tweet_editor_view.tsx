@@ -79,7 +79,6 @@ export class TweetEditorView extends React.Component<TweetEditorViewProps> {
                     onChangeTweet={this.props.onChangeTweet} />
 
                 <div className='tweet-footer'>
-
                     <Controls
                         tweet={this.props.tweet}
                         onReset={() => this.onReset()} />

@@ -40,13 +40,19 @@ export class TweetSelectView extends React.Component<TweetSelectViewProps, Tweet
     render() {
         return (
             <div>
-                Enter tweet url
-                <input
-                    type='text'
-                    placeholder={exampleTweet}
-                    value={this.state.value}
-                    onChange={e => this.onChange(e)}
-                    onKeyPress={e => this.onKeyPress(e)} />
+                <div>
+                    One change. Make it count.
+                </div>
+
+                <div>
+                    Enter tweet url
+                    <input
+                        type='text'
+                        placeholder={exampleTweet}
+                        value={this.state.value}
+                        onChange={e => this.onChange(e)}
+                        onKeyPress={e => this.onKeyPress(e)} />
+                </div>
             </div>
         )
     }
