@@ -29708,14 +29708,21 @@ class TweetSelectView extends React.Component {
         };
     }
     render() {
-        return (React.createElement("div", null,
-            React.createElement("div", null, "One change. Make it count."),
-            React.createElement("div", null,
-                "Enter tweet url",
+        return (React.createElement("div", { className: 'tweet-select-view' },
+            React.createElement("h1", null,
+                "One change.",
+                React.createElement("br", null),
+                "Make it count."),
+            React.createElement("div", { className: 'tweet-selector' },
+                React.createElement("h2", null, "Enter tweet url"),
+                React.createElement("div", null, this.state.error),
                 React.createElement("input", { type: 'text', placeholder: exampleTweet, value: this.state.value, onChange: e => this.onChange(e), onKeyPress: e => this.onKeyPress(e) }))));
     }
     onChange(event) {
-        this.setState({ value: event.target.value });
+        this.setState({
+            value: event.target.value,
+            error: undefined
+        });
     }
     onKeyPress(event) {
         if (event.key === 'Enter') {
@@ -29977,7 +29984,7 @@ const immutable = __webpack_require__(93);
 const draft_js_1 = __webpack_require__(94);
 const styleMap = {
     changed: {
-        background: 'lightgreen',
+        background: '#aefbbe',
     },
     selected: {
         boxShadow: 'inset 0 0 3px gray',

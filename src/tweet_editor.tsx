@@ -17,7 +17,7 @@ interface TweetState {
 
 const styleMap = {
     changed: {
-        background: 'lightgreen',
+        background: '#aefbbe',
     },
     selected: {
         boxShadow: 'inset 0 0 3px gray',

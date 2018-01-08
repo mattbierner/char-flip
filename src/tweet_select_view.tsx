@@ -39,13 +39,15 @@ export class TweetSelectView extends React.Component<TweetSelectViewProps, Tweet
 
     render() {
         return (
-            <div>
-                <div>
-                    One change. Make it count.
-                </div>
+            <div className='tweet-select-view'>
+                <h1>
+                    One change.<br />
+                    Make it count.
+                </h1>
 
-                <div>
-                    Enter tweet url
+                <div className='tweet-selector'>
+                    <h2>Enter tweet url</h2>
+                    <div>{this.state.error}</div>
                     <input
                         type='text'
                         placeholder={exampleTweet}
@@ -58,7 +60,10 @@ export class TweetSelectView extends React.Component<TweetSelectViewProps, Tweet
     }
 
     private onChange(event: React.ChangeEvent<HTMLInputElement>): void {
-        this.setState({ value: event.target.value })
+        this.setState({
+            value: event.target.value,
+            error: undefined
+        })
     }
 
     private onKeyPress(event: React.KeyboardEvent<HTMLInputElement>): void {

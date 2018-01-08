@@ -1,0 +1,18 @@
+.tweet-select-view {
+    width: 100%;
+}
+
+.tweet-select-view .tweet-selector {
+    padding: 30px 40px;
+    background: #fff;
+    border-radius: 8px;
+    flex: 1;
+}
+
+.tweet-select-view .tweet-selector input {
+    width: 100%;
+    text-align: center;
+    border: none;
+    border-bottom: 2px solid gray;
+    font-size: 1em;
+}

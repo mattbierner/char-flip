@@ -1,6 +1,9 @@
 header {
     margin-bottom: 2.5em;
 }
+header a {
+    color: var(--page-color);
+}
 
 header img {
     max-width: 100%;

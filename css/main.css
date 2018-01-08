@@ -1,15 +1,19 @@
+@import url('./header.css');
 @import url('./tweet_view.css');
+@import url('./tweet_select_view.css');
 
 :root {
-    --background-color: #33e5b1;
-    --changed-character-color: lightgreen;
+    --background-color: #ff7b7b;
+    --changed-character-color: #aefbbe;
+    --page-color: white;
+    --content-color: #444;
 }
 
 html {
     width: 100%;
     height: 100%;
     background: var(--background-color);
-    color: #14171a;
+    color: var(--content-color);
     text-align: center;
     font-size: 16px;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -24,7 +28,7 @@ body {
 }
 
 a {
-    color: #14171a;
+    color: var(--content-color);
     text-decoration: none;
 }
 
@@ -42,6 +46,7 @@ a:hover {
 }
 
 .content {
+    width: 100%;
     max-width: 600px;
     padding: 1em 2em;
     margin: 0 auto;
