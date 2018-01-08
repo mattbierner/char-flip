@@ -60,6 +60,10 @@ export class TweetEditorView extends React.Component<TweetEditorViewProps> {
     render() {
         return (
             <div>
+                <div>
+                    <a href={this.props.tweet.metadata.authorUrl}>{this.props.tweet.metadata.authorName}</a> —
+                    <a href={this.props.tweet.metadata.url}>{this.props.tweet.metadata.postDate}</a>
+                </div>
                 <TweetEditor
                     tweet={this.props.tweet}
                     onChangeTweet={this.props.onChangeTweet} />

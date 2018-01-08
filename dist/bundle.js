@@ -9044,24 +9044,40 @@ const getTweetOembedUrl = (userId, statusId) => {
         }
     });
 };
-const fetchTweetTextContent = (userId, statusId) => __awaiter(this, void 0, void 0, function* () {
-    const tweetOembedUrl = getTweetOembedUrl(userId, statusId);
+const fetchTweetContent = (authorId, statusId) => __awaiter(this, void 0, void 0, function* () {
+    const tweetOembedUrl = getTweetOembedUrl(authorId, statusId);
     if (!tweetOembedUrl) {
         throw 'invalid';
     }
     const result = yield jsonp(tweetOembedUrl).promise;
+    console.log(result);
     // Trust that twitter done sanitized the tweet already :)
     const div = document.createElement('div');
     div.innerHTML = result.html;
     const body = div.querySelector('p');
     if (!body) {
-        throw '';
+        throw 'Invalid body';
     }
-    return body.textContent || '';
+    const links = div.querySelectorAll('a');
+    let postDate = '';
+    if (links && links.length) {
+        postDate = links[links.length - 1].textContent || '';
+    }
+    return {
+        text: body.textContent || '',
+        metadata: {
+            url: result.url,
+            authorId,
+            statusId,
+            postDate,
+            authorName: result.author_name,
+            authorUrl: result.author_url
+        }
+    };
 });
-exports.fetchTweet = (userId, statusId) => __awaiter(this, void 0, void 0, function* () {
-    const textContent = yield fetchTweetTextContent(userId, statusId);
-    return edited_tweet_1.EditedTweet.create(userId, statusId, textContent);
+exports.fetchTweet = (authorId, statusId) => __awaiter(this, void 0, void 0, function* () {
+    const content = yield fetchTweetContent(authorId, statusId);
+    return edited_tweet_1.EditedTweet.create(content.metadata, content.text);
 });
 
 
@@ -11892,30 +11908,30 @@ var Stage;
     Stage[Stage["Editor"] = 2] = "Editor";
 })(Stage || (Stage = {}));
 class PersistedState {
-    constructor(userId, statusId, offset, insertion) {
-        this.userId = userId;
+    constructor(authorId, statusId, offset, insertion) {
+        this.authorId = authorId;
         this.statusId = statusId;
         this.offset = offset;
         this.insertion = insertion;
     }
     static tryGetFromQueryString() {
         const qs = queryString.parse(location.search);
-        if (isNaN(qs.version) || !qs.userId || !qs.statusId) {
+        if (isNaN(qs.version) || !qs.authorId || !qs.statusId) {
             return undefined;
         }
         if (+qs.version !== PersistedState.currentVersion) {
             return undefined;
         }
         if (isNaN(qs.offset) || Array.from(qs.insertion).length !== 1) {
-            return new PersistedState(qs.userId, qs.statusId, undefined, undefined);
+            return new PersistedState(qs.authorId, qs.statusId, undefined, undefined);
         }
-        return new PersistedState(qs.userId, qs.statusId, symbol_string_1.SymbolIndex.create(+qs.offset), qs.insertion);
+        return new PersistedState(qs.authorId, qs.statusId, symbol_string_1.SymbolIndex.create(+qs.offset), qs.insertion);
     }
     static persist(tweet) {
         const qs = queryString.stringify({
             version: PersistedState.currentVersion,
-            userId: tweet.userId,
-            statusId: tweet.statusId,
+            authorId: tweet.metadata.authorId,
+            statusId: tweet.metadata.statusId,
             offset: tweet.change ? tweet.change.offset.value : undefined,
             insertion: tweet.change ? tweet.change.insertion : undefined
         });
@@ -11933,7 +11949,7 @@ class Main extends React.Component {
     componentWillMount() {
         const persistedState = PersistedState.tryGetFromQueryString();
         if (persistedState) {
-            tweet_fetcher_1.fetchTweet(persistedState.userId, persistedState.statusId)
+            tweet_fetcher_1.fetchTweet(persistedState.authorId, persistedState.statusId)
                 .then(tweet => {
                 if (typeof persistedState.offset !== 'undefined' && typeof persistedState.insertion !== 'undefined') {
                     tweet = tweet.flipAt(persistedState.offset, persistedState.insertion);
@@ -29670,14 +29686,13 @@ module.exports = jsonp;
 Object.defineProperty(exports, "__esModule", { value: true });
 const symbol_string_1 = __webpack_require__(179);
 class EditedTweet {
-    constructor(userId, statusId, originalText, change) {
-        this.userId = userId;
-        this.statusId = statusId;
+    constructor(metadata, originalText, change) {
+        this.metadata = metadata;
         this.originalText = originalText;
         this.change = change;
     }
-    static create(userId, statusId, originalText) {
-        return new EditedTweet(userId, statusId, new symbol_string_1.SymbolString(originalText), undefined);
+    static create(metadata, text) {
+        return new EditedTweet(metadata, new symbol_string_1.SymbolString(text), undefined);
     }
     get editedText() {
         if (!this.change) {
@@ -29703,9 +29718,9 @@ class EditedTweet {
     }
     flipAt(offset, key) {
         if (this.originalText.symbols[offset.value] === key) {
-            return new EditedTweet(this.userId, this.statusId, this.originalText, undefined);
+            return new EditedTweet(this.metadata, this.originalText, undefined);
         }
-        return new EditedTweet(this.userId, this.statusId, this.originalText, {
+        return new EditedTweet(this.metadata, this.originalText, {
             offset,
             insertion: key
         });
@@ -29714,7 +29729,7 @@ class EditedTweet {
         if (!this.change) {
             return this;
         }
-        return new EditedTweet(this.userId, this.statusId, this.originalText, undefined);
+        return new EditedTweet(this.metadata, this.originalText, undefined);
     }
 }
 exports.EditedTweet = EditedTweet;
@@ -29829,6 +29844,10 @@ class Controls extends React.Component {
 class TweetEditorView extends React.Component {
     render() {
         return (React.createElement("div", null,
+            React.createElement("div", null,
+                React.createElement("a", { href: this.props.tweet.metadata.authorUrl }, this.props.tweet.metadata.authorName),
+                " \u2014",
+                React.createElement("a", { href: this.props.tweet.metadata.url }, this.props.tweet.metadata.postDate)),
             React.createElement(tweet_editor_1.TweetEditor, { tweet: this.props.tweet, onChangeTweet: this.props.onChangeTweet }),
             React.createElement(TweetDiffInfo, { tweet: this.props.tweet }),
             React.createElement(Controls, { tweet: this.props.tweet, onReset: () => this.onReset() })));

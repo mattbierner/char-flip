@@ -1,25 +1,28 @@
 import { Change } from './change'
 import { SymbolIndex, SymbolString } from './symbol_string';
 
+export interface TweetMetadata {
+    readonly url: string
+    readonly statusId: string
+    readonly postDate: string
+    readonly authorId: string
+    readonly authorName: string
+    readonly authorUrl: string
+}
+
 export class EditedTweet {
     private _charToSymbolMap?: number[]
 
-    public static create(
-        userId: string,
-        statusId: string,
-        originalText: string
-    ) {
+    public static create(metadata: TweetMetadata, text: string) {
         return new EditedTweet(
-            userId,
-            statusId,
-            new SymbolString(originalText),
+            metadata,
+            new SymbolString(text),
             undefined
         )
     }
 
     private constructor(
-        public readonly userId: string,
-        public readonly statusId: string,
+        public readonly metadata: TweetMetadata,
         public readonly originalText: SymbolString,
         public readonly change: Change | undefined
     ) { }
@@ -50,10 +53,10 @@ export class EditedTweet {
 
     public flipAt(offset: SymbolIndex, key: string): EditedTweet {
         if (this.originalText.symbols[offset.value] === key) {
-            return new EditedTweet(this.userId, this.statusId, this.originalText, undefined)
+            return new EditedTweet(this.metadata, this.originalText, undefined)
         }
 
-        return new EditedTweet(this.userId, this.statusId, this.originalText, {
+        return new EditedTweet(this.metadata, this.originalText, {
             offset,
             insertion: key
         })
@@ -64,6 +67,6 @@ export class EditedTweet {
             return this
         }
 
-        return new EditedTweet(this.userId, this.statusId, this.originalText, undefined);
+        return new EditedTweet(this.metadata, this.originalText, undefined);
     }
 }

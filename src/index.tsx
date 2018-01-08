@@ -18,7 +18,7 @@ class PersistedState {
     public static readonly currentVersion = 1
 
     private constructor(
-        public readonly userId: string,
+        public readonly authorId: string,
         public readonly statusId: string,
         public readonly offset: SymbolIndex | undefined,
         public readonly insertion: string | undefined
@@ -26,7 +26,7 @@ class PersistedState {
 
     public static tryGetFromQueryString(): PersistedState | undefined {
         const qs = queryString.parse(location.search)
-        if (isNaN(qs.version) || !qs.userId || !qs.statusId) {
+        if (isNaN(qs.version) || !qs.authorId || !qs.statusId) {
             return undefined
         }
 
@@ -36,14 +36,14 @@ class PersistedState {
 
         if (isNaN(qs.offset) || Array.from(qs.insertion).length !== 1) {
             return new PersistedState(
-                qs.userId,
+                qs.authorId,
                 qs.statusId,
                 undefined,
                 undefined)
         }
 
         return new PersistedState(
-            qs.userId,
+            qs.authorId,
             qs.statusId,
             SymbolIndex.create(+qs.offset),
             qs.insertion
@@ -53,8 +53,8 @@ class PersistedState {
     public static persist(tweet: EditedTweet): void {
         const qs = queryString.stringify({
             version: PersistedState.currentVersion,
-            userId: tweet.userId,
-            statusId: tweet.statusId,
+            authorId: tweet.metadata.authorId,
+            statusId: tweet.metadata.statusId,
             offset: tweet.change ? tweet.change.offset.value : undefined,
             insertion: tweet.change ? tweet.change.insertion : undefined
         })
@@ -80,7 +80,7 @@ class Main extends React.Component<{}, MainState> {
     componentWillMount() {
         const persistedState = PersistedState.tryGetFromQueryString()
         if (persistedState) {
-            fetchTweet(persistedState.userId, persistedState.statusId)
+            fetchTweet(persistedState.authorId, persistedState.statusId)
                 .then(tweet => {
                     if (typeof persistedState.offset !== 'undefined' && typeof persistedState.insertion !== 'undefined') {
                         tweet = tweet.flipAt(persistedState.offset, persistedState.insertion)
