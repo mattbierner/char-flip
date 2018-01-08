@@ -9078,7 +9078,7 @@ const fetchTweetContent = (authorId, statusId) => __awaiter(this, void 0, void 0
             authorId: foundAuthorId,
             statusId,
             postDate,
-            authorName: result.author_url,
+            authorName: result.author_name,
             authorUrl: result.author_url
         }
     };

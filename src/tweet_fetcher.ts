@@ -71,7 +71,7 @@ const fetchTweetContent = async (authorId: string, statusId: string): Promise<Tw
             authorId: foundAuthorId,
             statusId,
             postDate,
-            authorName: result.author_url,
+            authorName: result.author_name,
             authorUrl: result.author_url
         }
     }
