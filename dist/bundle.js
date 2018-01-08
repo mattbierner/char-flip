@@ -29774,7 +29774,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(5);
 const copy = __webpack_require__(90);
 const tweet_editor_1 = __webpack_require__(92);
-class TweetDiffInfo extends React.Component {
+class TweetDiffInfo extends React.PureComponent {
     render() {
         const { tweet } = this.props;
         if (!tweet.change) {
@@ -29787,6 +29787,20 @@ class TweetDiffInfo extends React.Component {
                 React.createElement("span", { className: 'diff-char old-char' }, oldChar),
                 " \u21E8 ",
                 React.createElement("span", { className: 'diff-char new-char' }, newChar))));
+    }
+}
+class TweetHeader extends React.PureComponent {
+    render() {
+        return (React.createElement("div", { className: 'tweet-header' },
+            React.createElement("div", { className: 'author' },
+                React.createElement("img", { className: 'author-image', src: this.props.tweet.userImageUrl }),
+                React.createElement("span", { className: 'author-name-and-id' },
+                    React.createElement("a", { className: 'author-name', href: this.props.tweet.metadata.authorUrl }, this.props.tweet.metadata.authorName),
+                    React.createElement("br", null),
+                    React.createElement("span", { className: 'author-id' }, this.props.tweet.metadata.authorId))),
+            React.createElement("div", { className: 'post-info' },
+                React.createElement("a", { className: 'post-date', href: this.props.tweet.metadata.url }, this.props.tweet.metadata.postDate),
+                React.createElement(TweetDiffInfo, { tweet: this.props.tweet }))));
     }
 }
 class Controls extends React.Component {
@@ -29831,23 +29845,23 @@ class Controls extends React.Component {
 }
 class TweetEditorView extends React.Component {
     render() {
-        return (React.createElement("div", { className: 'tweet' },
-            React.createElement("div", { className: 'tweet-header' },
-                React.createElement("div", { className: 'author' },
-                    React.createElement("img", { className: 'author-image', src: this.props.tweet.userImageUrl }),
-                    React.createElement("span", { className: 'author-name-and-id' },
-                        React.createElement("a", { className: 'author-name', href: this.props.tweet.metadata.authorUrl }, this.props.tweet.metadata.authorName),
-                        React.createElement("br", null),
-                        React.createElement("span", { className: 'author-id' }, this.props.tweet.metadata.authorId))),
-                React.createElement("div", { className: 'post-info' },
-                    React.createElement("a", { className: 'post-date', href: this.props.tweet.metadata.url }, this.props.tweet.metadata.postDate),
-                    React.createElement(TweetDiffInfo, { tweet: this.props.tweet }))),
+        return (React.createElement("div", { className: 'tweet ' + this.getLengthClass(this.props.tweet) },
+            React.createElement(TweetHeader, { tweet: this.props.tweet }),
             React.createElement(tweet_editor_1.TweetEditor, { tweet: this.props.tweet, onChangeTweet: this.props.onChangeTweet }),
             React.createElement("div", { className: 'tweet-footer' },
                 React.createElement(Controls, { tweet: this.props.tweet, onReset: () => this.onReset() }))));
     }
     onReset() {
         this.props.onChangeTweet(this.props.tweet.reset());
+    }
+    getLengthClass(tweet) {
+        const len = tweet.originalText.symbols.length;
+        if (len < 80) {
+            return 'len-80';
+        }
+        else if (len < 160) {
+            return 'len-160';
+        }
     }
 }
 exports.TweetEditorView = TweetEditorView;

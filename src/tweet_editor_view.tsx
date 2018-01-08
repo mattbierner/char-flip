@@ -4,7 +4,7 @@ const copy = require('copy-to-clipboard')
 import { Tweet } from './tweet';
 import { TweetEditor } from './tweet_editor';
 
-class TweetDiffInfo extends React.Component<{ tweet: Tweet }> {
+class TweetDiffInfo extends React.PureComponent<{ tweet: Tweet }> {
     render() {
         const { tweet } = this.props
         if (!tweet.change) {
@@ -17,6 +17,26 @@ class TweetDiffInfo extends React.Component<{ tweet: Tweet }> {
             <div className='tweet-diff-info'>
                 <div>
                     <span className='diff-char old-char'>{oldChar}</span> ⇨ <span className='diff-char new-char'>{newChar}</span>
+                </div>
+            </div>
+        )
+    }
+}
+
+class TweetHeader extends React.PureComponent<{ tweet: Tweet }> {
+    render() {
+        return (
+            <div className='tweet-header'>
+                <div className='author'>
+                    <img className='author-image' src={this.props.tweet.userImageUrl} />
+                    <span className='author-name-and-id'>
+                        <a className='author-name' href={this.props.tweet.metadata.authorUrl}>{this.props.tweet.metadata.authorName}</a><br />
+                        <span className='author-id'>{this.props.tweet.metadata.authorId}</span>
+                    </span>
+                </div>
+                <div className='post-info'>
+                    <a className='post-date' href={this.props.tweet.metadata.url}>{this.props.tweet.metadata.postDate}</a>
+                    <TweetDiffInfo tweet={this.props.tweet} />
                 </div>
             </div>
         )
@@ -92,20 +112,8 @@ interface TweetEditorViewProps {
 export class TweetEditorView extends React.Component<TweetEditorViewProps> {
     render() {
         return (
-            <div className='tweet'>
-                <div className='tweet-header'>
-                    <div className='author'>
-                        <img className='author-image' src={this.props.tweet.userImageUrl} />
-                        <span className='author-name-and-id'>
-                            <a className='author-name' href={this.props.tweet.metadata.authorUrl}>{this.props.tweet.metadata.authorName}</a><br />
-                            <span className='author-id'>{this.props.tweet.metadata.authorId}</span>
-                        </span>
-                    </div>
-                    <div className='post-info'>
-                        <a className='post-date' href={this.props.tweet.metadata.url}>{this.props.tweet.metadata.postDate}</a>
-                        <TweetDiffInfo tweet={this.props.tweet} />
-                    </div>
-                </div>
+            <div className={'tweet ' + this.getLengthClass(this.props.tweet)}>
+                <TweetHeader tweet={this.props.tweet} />
 
                 <TweetEditor
                     tweet={this.props.tweet}
@@ -122,5 +130,14 @@ export class TweetEditorView extends React.Component<TweetEditorViewProps> {
 
     private onReset(): void {
         this.props.onChangeTweet(this.props.tweet.reset())
+    }
+
+    private getLengthClass(tweet: Tweet) {
+        const len = tweet.originalText.symbols.length
+        if (len < 80) {
+            return 'len-80'
+        } else if (len < 160) {
+            return 'len-160'
+        }
     }
 }

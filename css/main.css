@@ -25,12 +25,15 @@ html {
     -webkit-font-smoothing: antialiased;
 }
 
+body {
+    padding: 0 1rem;
+}
+
 body, #main {
     min-height: 100%;
     margin: 0;
     display: flex;
     flex-direction: column;
-    padding: 0 2em;
 }
 
 a {
