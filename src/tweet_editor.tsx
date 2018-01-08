@@ -26,7 +26,11 @@ const styleMap = {
 };
 
 export class TweetEditor extends React.Component<TweetProps, TweetState> {
-    escapeListener: void;
+    private static readonly empty = immutable.OrderedSet([])
+    private static readonly selected = immutable.OrderedSet(['selected'])
+    private static readonly changed = immutable.OrderedSet(['changed'])
+    private static readonly selectedAndChanged = immutable.OrderedSet(['selected', 'changed'])
+
     constructor(props: TweetProps) {
         super(props)
 
@@ -106,7 +110,7 @@ export class TweetEditor extends React.Component<TweetProps, TweetState> {
     private handleKeyCommand(command: string, editorState: EditorState): 'not-handled' | 'handled' {
         if (command === 'backspace') {
             const selection = editorState.getSelection()
-            if (this.props.tweet.change && this.props.tweet.editedText.toSymbolIndex(selection.getStartOffset()).value === this.props.tweet.change.offset.value) {
+            if (this.props.tweet.change && this.props.tweet.editedText.toSymbolIndex(selection.getStartOffset()).equals(this.props.tweet.change.offset)) {
                 const editedTweet = this.props.tweet.reset()
 
                 const selection = editorState.getSelection()
@@ -122,18 +126,15 @@ export class TweetEditor extends React.Component<TweetProps, TweetState> {
     }
 
     private newContentForEdited(edited: Tweet, selection?: SelectionState) {
-        const empty = immutable.OrderedSet([])
-        const selected = immutable.OrderedSet(['selected'])
-        const changed = immutable.OrderedSet(['changed'])
-        const selectedAndChanged = immutable.OrderedSet(['selected', 'changed'])
-
+        const selectionSymbolIndex = selection && edited.editedText.toSymbolIndex(selection.getStartOffset());
         const characterList = immutable.List(edited.editedText.characters.map((_, i) => {
-            const s = !!selection && edited.editedText.toSymbolIndex(i).value === edited.editedText.toSymbolIndex(selection.getStartOffset()).value
-            const c = !!edited.change && i === edited.editedText.toCharacterIndex(edited.change.offset)
+            const currentSymbolIndex = edited.editedText.toSymbolIndex(i)
+            const s = !!selection && selectionSymbolIndex && currentSymbolIndex.equals(selectionSymbolIndex)
+            const c = !!edited.change && currentSymbolIndex.equals(edited.change.offset)
             return CharacterMetadata.create({
                 style: s
-                    ? (c ? selectedAndChanged : selected)
-                    : (c ? changed : empty)
+                    ? (c ? TweetEditor.selectedAndChanged : TweetEditor.selected)
+                    : (c ? TweetEditor.changed : TweetEditor.empty)
             })
         }))
 

@@ -9071,7 +9071,7 @@ const fetchTweetContent = (authorId, statusId) => __awaiter(this, void 0, void 0
         throw 'Found author id does not match tweet author id';
     }
     return {
-        text: '😀😀x',
+        text: body.textContent || '',
         metadata: {
             url: result.url,
             authorId: foundAuthorId,
@@ -9102,6 +9102,9 @@ class SymbolIndex {
     static create(value) {
         return new SymbolIndex(value);
     }
+    equals(other) {
+        return this.value === other.value;
+    }
 }
 exports.SymbolIndex = SymbolIndex;
 class SymbolString {
@@ -9125,10 +9128,6 @@ class SymbolString {
             ++symbolIndex;
         }
         return SymbolIndex.create(charIndex);
-    }
-    toCharacterIndex(symbolIndex) {
-        return this.symbols.slice(0, symbolIndex.value)
-            .reduce((sum, c) => sum + c.length, 0);
     }
 }
 exports.SymbolString = SymbolString;
@@ -30062,7 +30061,7 @@ class TweetEditor extends React.Component {
     handleKeyCommand(command, editorState) {
         if (command === 'backspace') {
             const selection = editorState.getSelection();
-            if (this.props.tweet.change && this.props.tweet.editedText.toSymbolIndex(selection.getStartOffset()).value === this.props.tweet.change.offset.value) {
+            if (this.props.tweet.change && this.props.tweet.editedText.toSymbolIndex(selection.getStartOffset()).equals(this.props.tweet.change.offset)) {
                 const editedTweet = this.props.tweet.reset();
                 const selection = editorState.getSelection();
                 const newState = draft_js_1.EditorState.acceptSelection(draft_js_1.EditorState.createWithContent(this.newContentForEdited(editedTweet, selection)), selection);
@@ -30073,17 +30072,15 @@ class TweetEditor extends React.Component {
         return 'handled';
     }
     newContentForEdited(edited, selection) {
-        const empty = immutable.OrderedSet([]);
-        const selected = immutable.OrderedSet(['selected']);
-        const changed = immutable.OrderedSet(['changed']);
-        const selectedAndChanged = immutable.OrderedSet(['selected', 'changed']);
+        const selectionSymbolIndex = selection && edited.editedText.toSymbolIndex(selection.getStartOffset());
         const characterList = immutable.List(edited.editedText.characters.map((_, i) => {
-            const s = !!selection && edited.editedText.toSymbolIndex(i).value === edited.editedText.toSymbolIndex(selection.getStartOffset()).value;
-            const c = !!edited.change && i === edited.editedText.toCharacterIndex(edited.change.offset);
+            const currentSymbolIndex = edited.editedText.toSymbolIndex(i);
+            const s = !!selection && selectionSymbolIndex && currentSymbolIndex.equals(selectionSymbolIndex);
+            const c = !!edited.change && currentSymbolIndex.equals(edited.change.offset);
             return draft_js_1.CharacterMetadata.create({
                 style: s
-                    ? (c ? selectedAndChanged : selected)
-                    : (c ? changed : empty)
+                    ? (c ? TweetEditor.selectedAndChanged : TweetEditor.selected)
+                    : (c ? TweetEditor.changed : TweetEditor.empty)
             });
         }));
         const block = new draft_js_1.ContentBlock().set('text', edited.editedText.text)
@@ -30093,6 +30090,10 @@ class TweetEditor extends React.Component {
         return draft_js_1.ContentState.createFromBlockArray([block]);
     }
 }
+TweetEditor.empty = immutable.OrderedSet([]);
+TweetEditor.selected = immutable.OrderedSet(['selected']);
+TweetEditor.changed = immutable.OrderedSet(['changed']);
+TweetEditor.selectedAndChanged = immutable.OrderedSet(['selected', 'changed']);
 exports.TweetEditor = TweetEditor;
 
 
