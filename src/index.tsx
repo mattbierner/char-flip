@@ -123,12 +123,11 @@ class Main extends React.Component<{}, MainState> {
             body = (
                 <div className='content'>Loading</div>
             )
-
         }
 
         return (
             <>
-            <PageHeader />
+            <PageHeader active={this.state.stage !== Stage.Editor} />
             {body}
             </>
         )
