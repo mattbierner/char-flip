@@ -5,6 +5,8 @@ const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
 
 const randomChar = () => possible[Math.floor(Math.random() * possible.length)]
 
+const randomSetTimeout = (min: number, max: number, f: () => void) =>
+    setTimeout(f, Math.random() * (max - min) + min)
 
 class FlippableCharacter extends React.PureComponent<{ original: string, new: string, flipped: boolean }> {
     render() {

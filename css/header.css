@@ -1,9 +1,15 @@
 header {
     margin-bottom: 2.5em;
+    font-family: 'VT323', monospace;
+    letter-spacing: 4px;
 }
 
-header a {
+
+header a,
+header a:hover {
     color: var(--page-color);
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--page-color);
 }
 
 /** https://davidwalsh.name/css-flip */
@@ -18,7 +24,7 @@ header a {
 
 .flipper {
     display: block;
-    transition: 0.4s;
+    transition: 0.3s;
     transform-style: preserve-3d;
     position: relative;
 }
@@ -28,10 +34,11 @@ header a {
 }
 
 /* hide back of pane during swap */
-.flipper .original, .flipper  .new {
+.flipper .original,
+.flipper .new {
     display: block;
     backface-visibility: hidden;
-    background: var(--background-color);
+    background-color: var(--background-color);
     position: absolute;
     top: 0;
     left: 0;
@@ -40,7 +47,6 @@ header a {
 /* front pane, placed above back */
 .flipper .original {
     z-index: 2;
-    /* for firefox 31 */
     transform: rotateY(0deg);
 }
 

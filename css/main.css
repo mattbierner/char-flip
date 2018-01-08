@@ -3,6 +3,10 @@
 @import url('./tweet_view.css');
 @import url('./tweet_select_view.css');
 
+@import url('https://fonts.googleapis.com/css?family=VT323');
+
+
+
 :root {
     --background-color: #ff7b7b;
     --changed-character-color: #aefbbe;
@@ -40,10 +44,6 @@ a:hover {
 #main {
     flex: 1;
     display: flex;
-}
-
-.page-header {
-    font-family: 'Courier New', Courier, monospace;
 }
 
 .content {

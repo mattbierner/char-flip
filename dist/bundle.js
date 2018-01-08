@@ -43307,6 +43307,7 @@ const React = __webpack_require__(5);
 const timers_1 = __webpack_require__(183);
 const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 const randomChar = () => possible[Math.floor(Math.random() * possible.length)];
+const randomSetTimeout = (min, max, f) => setTimeout(f, Math.random() * (max - min) + min);
 class FlippableCharacter extends React.PureComponent {
     render() {
         return (React.createElement("span", { className: 'flip-container ' + (this.props.flipped ? 'flipped' : '') },
