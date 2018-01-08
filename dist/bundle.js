@@ -43305,14 +43305,26 @@ exports.LoadingSpinner = LoadingSpinner;
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(5);
 class PageHeader extends React.Component {
-    constructor() {
-        super(...arguments);
+    constructor(props) {
+        super(props);
         this.title = 'char flip';
+        this.state = {
+            index: 0,
+            replacement: 'b'
+        };
     }
     render() {
+        const text = this.title.split('').map((x, i) => {
+            if (i === this.state.index) {
+                return React.createElement("span", { key: i, className: 'flipped' },
+                    React.createElement("span", { className: 'origin' }, x),
+                    React.createElement("span", { className: 'new' }, this.state.replacement));
+            }
+            return React.createElement("span", { key: i }, x);
+        });
         return (React.createElement("header", { className: "page-header" },
             React.createElement("h1", null,
-                React.createElement("a", { href: "." }, this.title))));
+                React.createElement("a", { href: "." }, text))));
     }
 }
 exports.PageHeader = PageHeader;
