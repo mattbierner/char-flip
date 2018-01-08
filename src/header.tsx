@@ -6,16 +6,16 @@ const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
 const randomChar = () => possible[Math.floor(Math.random() * possible.length)]
 
 
-class FlippableCharacter extends React.PureComponent<{ original: string, new: string, flipped: boolean }> {
+class FlippableCharacter extends React.PureComponent<{ originalChar: string, newChar: string, flipped: boolean }> {
     render() {
         return (
-            <span className={'flip-container ' + (this.props.flipped ? 'flipped' : '')}>
-                <span className='flipper'>
-                    <span className='original'>{this.props.original}</span>
-                    <span className='new'>{this.props.new}</span>
-                    <span style={{ visibility: 'hidden' }}>{this.props.original}</span>
-                </span>
-            </span>
+            <div className={'flip-container ' + (this.props.flipped ? 'flipped' : '')}>
+                <div className='flipper'>
+                    <div className='original'>{this.props.originalChar}</div>
+                    <div className='new'>{this.props.newChar}</div>
+                </div>
+                <span style={{ visibility: 'hidden' }}>{this.props.originalChar}</span>
+            </div>
         )
     }
 }
@@ -34,7 +34,7 @@ interface PageHeaderState {
 export class PageHeader extends React.Component<PageHeaderProps, PageHeaderState> {
     private readonly title = 'char flip'
 
-    private interval?: any
+    private updateInterval?: any
 
     constructor(props: PageHeaderProps) {
         super(props)
@@ -60,24 +60,21 @@ export class PageHeader extends React.Component<PageHeaderProps, PageHeaderState
     render() {
         const text = this.title.split('').map((x, i) => {
             return <FlippableCharacter key={i}
-                original={x}
-                new={i === this.state.oldIndex ? this.state.oldReplacement : this.state.replacement}
+                originalChar={x}
+                newChar={i === this.state.oldIndex ? this.state.oldReplacement : this.state.replacement}
                 flipped={this.props.active && i === this.state.index} />
         })
 
         return (
             <header className='page-header' >
                 <h1><a href='.'>{text}</a></h1>
-                <h2>
-                    One change<br />
-                    Make it count
-                </h2>
+                <h2>One change<br />Make it count</h2>
             </header>
         )
     }
 
     private toggleActive(active: boolean) {
-        clearInterval(this.interval)
+        clearInterval(this.updateInterval)
         this.setState({
             index: -1,
             replacement: '',
@@ -86,9 +83,14 @@ export class PageHeader extends React.Component<PageHeaderProps, PageHeaderState
         })
 
         if (active) {
-            this.interval = setInterval(() => {
+            this.updateInterval = setInterval(() => {
+                let newIndex = -1;
+                do {
+                    newIndex = Math.floor(Math.random() * this.title.length)
+                } while (newIndex === this.state.index)
+
                 this.setState({
-                    index: Math.floor(Math.random() * this.title.length),
+                    index: newIndex,
                     replacement: randomChar(),
                     oldReplacement: this.state.replacement,
                     oldIndex: this.state.index

@@ -43723,11 +43723,11 @@ const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
 const randomChar = () => possible[Math.floor(Math.random() * possible.length)];
 class FlippableCharacter extends React.PureComponent {
     render() {
-        return (React.createElement("span", { className: 'flip-container ' + (this.props.flipped ? 'flipped' : '') },
-            React.createElement("span", { className: 'flipper' },
-                React.createElement("span", { className: 'original' }, this.props.original),
-                React.createElement("span", { className: 'new' }, this.props.new),
-                React.createElement("span", { style: { visibility: 'hidden' } }, this.props.original))));
+        return (React.createElement("div", { className: 'flip-container ' + (this.props.flipped ? 'flipped' : '') },
+            React.createElement("div", { className: 'flipper' },
+                React.createElement("div", { className: 'original' }, this.props.originalChar),
+                React.createElement("div", { className: 'new' }, this.props.newChar)),
+            React.createElement("span", { style: { visibility: 'hidden' } }, this.props.originalChar)));
     }
 }
 class PageHeader extends React.Component {
@@ -43751,7 +43751,7 @@ class PageHeader extends React.Component {
     }
     render() {
         const text = this.title.split('').map((x, i) => {
-            return React.createElement(FlippableCharacter, { key: i, original: x, new: i === this.state.oldIndex ? this.state.oldReplacement : this.state.replacement, flipped: this.props.active && i === this.state.index });
+            return React.createElement(FlippableCharacter, { key: i, originalChar: x, newChar: i === this.state.oldIndex ? this.state.oldReplacement : this.state.replacement, flipped: this.props.active && i === this.state.index });
         });
         return (React.createElement("header", { className: 'page-header' },
             React.createElement("h1", null,
@@ -43762,7 +43762,7 @@ class PageHeader extends React.Component {
                 "Make it count")));
     }
     toggleActive(active) {
-        clearInterval(this.interval);
+        clearInterval(this.updateInterval);
         this.setState({
             index: -1,
             replacement: '',
@@ -43770,9 +43770,13 @@ class PageHeader extends React.Component {
             oldReplacement: ''
         });
         if (active) {
-            this.interval = timers_1.setInterval(() => {
+            this.updateInterval = timers_1.setInterval(() => {
+                let newIndex = -1;
+                do {
+                    newIndex = Math.floor(Math.random() * this.title.length);
+                } while (newIndex === this.state.index);
                 this.setState({
-                    index: Math.floor(Math.random() * this.title.length),
+                    index: newIndex,
                     replacement: randomChar(),
                     oldReplacement: this.state.replacement,
                     oldIndex: this.state.index
