@@ -29764,18 +29764,18 @@ class TweetDiffInfo extends React.Component {
         const newChar = tweet.change.insertion;
         return (React.createElement("div", { className: 'tweet-diff-info' },
             React.createElement("div", null,
-                React.createElement("span", { className: 'diff-char' }, oldChar),
-                " --> ",
-                React.createElement("span", { className: 'diff-char' }, newChar)),
-            React.createElement("div", null,
-                React.createElement("span", null, tweet.change.offset.value))));
+                React.createElement("span", { className: 'diff-char old-char' }, oldChar),
+                " \u21E8 ",
+                React.createElement("span", { className: 'diff-char new-char' }, newChar))));
     }
 }
 class Controls extends React.Component {
     render() {
         return (React.createElement("div", { className: 'controls' },
-            React.createElement("button", { disabled: !this.props.tweet.change, onClick: this.props.onReset }, "Reset"),
-            React.createElement("button", { disabled: !this.props.tweet.change, onClick: () => this.onShare() }, "share")));
+            React.createElement("button", { title: 'reset', className: 'material-button', disabled: !this.props.tweet.change, onClick: this.props.onReset },
+                React.createElement("i", { className: 'material-icons' }, "undo")),
+            React.createElement("button", { title: 'copy link', disabled: !this.props.tweet.change, onClick: () => this.onShare() },
+                React.createElement("i", { className: 'material-icons' }, "link"))));
     }
     onShare() {
         if (!this.props.tweet.change) {
@@ -29794,10 +29794,11 @@ class TweetEditorView extends React.Component {
                         React.createElement("a", { className: 'author-name', href: this.props.tweet.metadata.authorUrl }, this.props.tweet.metadata.authorName),
                         React.createElement("br", null),
                         React.createElement("span", { className: 'author-id' }, this.props.tweet.metadata.authorId))),
-                React.createElement("a", { className: 'post-info', href: this.props.tweet.metadata.url }, this.props.tweet.metadata.postDate)),
+                React.createElement("div", { className: 'post-info' },
+                    React.createElement("a", { className: 'post-date', href: this.props.tweet.metadata.url }, this.props.tweet.metadata.postDate),
+                    React.createElement(TweetDiffInfo, { tweet: this.props.tweet }))),
             React.createElement(tweet_editor_1.TweetEditor, { tweet: this.props.tweet, onChangeTweet: this.props.onChangeTweet }),
             React.createElement("div", { className: 'tweet-footer' },
-                React.createElement(TweetDiffInfo, { tweet: this.props.tweet }),
                 React.createElement(Controls, { tweet: this.props.tweet, onReset: () => this.onReset() }))));
     }
     onReset() {

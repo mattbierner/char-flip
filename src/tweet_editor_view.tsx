@@ -16,10 +16,7 @@ class TweetDiffInfo extends React.Component<{ tweet: Tweet }> {
         return (
             <div className='tweet-diff-info'>
                 <div>
-                    <span className='diff-char'>{oldChar}</span> --> <span className='diff-char'>{newChar}</span>
-                </div>
-                <div>
-                    <span>{tweet.change.offset.value}</span>
+                    <span className='diff-char old-char'>{oldChar}</span> ⇨ <span className='diff-char new-char'>{newChar}</span>
                 </div>
             </div>
         )
@@ -31,13 +28,16 @@ class Controls extends React.Component<{ tweet: Tweet, onReset: () => void }> {
         return (
             <div className='controls'>
                 <button
+                    title='reset'
+                    className='material-button'
                     disabled={!this.props.tweet.change}
                     onClick={this.props.onReset}
-                >Reset</button>
+                ><i className='material-icons'>undo</i></button>
                 <button
+                    title='copy link'
                     disabled={!this.props.tweet.change}
                     onClick={() => this.onShare()}
-                >share</button>
+                ><i className='material-icons'>link</i></button>
             </div>
         )
     }
@@ -68,7 +68,10 @@ export class TweetEditorView extends React.Component<TweetEditorViewProps> {
                             <span className='author-id'>{this.props.tweet.metadata.authorId}</span>
                         </span>
                     </div>
-                    <a className='post-info' href={this.props.tweet.metadata.url}>{this.props.tweet.metadata.postDate}</a>
+                    <div className='post-info'>
+                        <a className='post-date' href={this.props.tweet.metadata.url}>{this.props.tweet.metadata.postDate}</a>
+                        <TweetDiffInfo tweet={this.props.tweet} />
+                    </div>
                 </div>
 
                 <TweetEditor
@@ -76,8 +79,7 @@ export class TweetEditorView extends React.Component<TweetEditorViewProps> {
                     onChangeTweet={this.props.onChangeTweet} />
 
                 <div className='tweet-footer'>
-                    <TweetDiffInfo
-                        tweet={this.props.tweet} />
+
                     <Controls
                         tweet={this.props.tweet}
                         onReset={() => this.onReset()} />

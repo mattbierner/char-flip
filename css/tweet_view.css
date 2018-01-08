@@ -9,12 +9,16 @@
 
 .tweet-diff-info .diff-char {
     display: inline-block;
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
     vertical-align: middle;
-    border-radius: 100px;
-    background: #ccc;
+    padding: 4px;
+}
+
+.tweet-diff-info .diff-char.old-char {
+    box-shadow: inset 0 0 3px gray;
+}
+
+.tweet-diff-info .diff-char.new-char {
+    background: var(--changed-character-color);
 }
 
 .tweet-header {
@@ -53,11 +57,31 @@
     content: "@";
 }
 
-
-
+.tweet-header .post-date {
+    display: block;
+    margin-bottom: 0.4em;
+}
 
 .tweet-footer {
     border-top: 1px solid var(--background-color);
     margin-top: 1em;
     padding-top: 1em;
 }
+
+.controls button {
+    border-radius: 100px;
+    width: 60px;
+    height: 60px;
+    border: 1px sold gray;
+    background: white;
+}
+
+@keyframes cursor-blink {
+    0% {
+        box-shadow: inset 0 0 3px gray;
+    }
+    100% {
+        box-shadow: inset 0 0 3px transparent;
+        background-color: transparent;
+    }
+  }
