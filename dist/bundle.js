@@ -29794,11 +29794,11 @@ class TweetEditorView extends React.Component {
                         React.createElement("a", { className: 'author-name', href: this.props.tweet.metadata.authorUrl }, this.props.tweet.metadata.authorName),
                         React.createElement("br", null),
                         React.createElement("span", { className: 'author-id' }, this.props.tweet.metadata.authorId))),
-                React.createElement("div", { className: 'post' },
-                    React.createElement("a", { href: this.props.tweet.metadata.url }, this.props.tweet.metadata.postDate))),
+                React.createElement("a", { className: 'post-info', href: this.props.tweet.metadata.url }, this.props.tweet.metadata.postDate)),
             React.createElement(tweet_editor_1.TweetEditor, { tweet: this.props.tweet, onChangeTweet: this.props.onChangeTweet }),
-            React.createElement(TweetDiffInfo, { tweet: this.props.tweet }),
-            React.createElement(Controls, { tweet: this.props.tweet, onReset: () => this.onReset() })));
+            React.createElement("div", { className: 'tweet-footer' },
+                React.createElement(TweetDiffInfo, { tweet: this.props.tweet }),
+                React.createElement(Controls, { tweet: this.props.tweet, onReset: () => this.onReset() }))));
     }
     onReset() {
         this.props.onChangeTweet(this.props.tweet.reset());

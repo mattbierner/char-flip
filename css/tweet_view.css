@@ -1,7 +1,10 @@
 .tweet {
     background: #fff;
     border-radius: 8px;
-    padding: 30px 40px;
+}
+
+.tweet > * {
+    padding: 0 40px;
 }
 
 .tweet-diff-info .diff-char {
@@ -17,6 +20,8 @@
 .tweet-header {
     display: flex;
     flex-direction: row;
+    padding-top: 30px;
+    padding-bottom: 1em;
 }
 
 .tweet-header .author {
@@ -25,7 +30,6 @@
     flex-direction: row;
     text-align: left;
     align-items: center;
-    padding-bottom: 1em;
 }
 
 .tweet-header .author-image {
@@ -47,4 +51,13 @@
 
 .tweet-header .author-id:before {
     content: "@";
+}
+
+
+
+
+.tweet-footer {
+    border-top: 1px solid var(--background-color);
+    margin-top: 1em;
+    padding-top: 1em;
 }
