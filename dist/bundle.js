@@ -29695,7 +29695,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(5);
 const tweet_fetcher_1 = __webpack_require__(47);
 const loading_spinner_1 = __webpack_require__(181);
-const exampleTweet = 'https://twitter.com/realDonaldTrump/status/949070800417640454';
+const exampleTweet = 'https://twitter.com/realDonaldTrump/status/950103659337134080';
 const parseUrl = (url) => {
     const match = url.match(/^https:\/\/twitter.com\/([^\\]+)\/status\/(\d+)$/);
     if (!match) {
@@ -29718,9 +29718,9 @@ class TweetSelectView extends React.Component {
     render() {
         return (React.createElement("div", { className: 'tweet-select-view' },
             React.createElement("h1", null,
-                "One change.",
+                "One change",
                 React.createElement("br", null),
-                "Make it count."),
+                "Make it count"),
             React.createElement("div", { className: 'tweet-selector' },
                 React.createElement("h2", null, "Enter tweet url"),
                 React.createElement("div", null, this.state.error),

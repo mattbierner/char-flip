@@ -2,17 +2,30 @@
     width: 100%;
 }
 
+.tweet-select-view h1 {
+    color: var(--page-color);
+    font-family: 'VT323', monospace;
+    font-size: 1.2rem;
+    padding-bottom: 3rem;
+}
+
 .tweet-select-view .tweet-selector {
     padding: 30px 40px;
-    background: #fff;
+    background: var(--page-color);
     border-radius: 8px;
     flex: 1;
+}
+
+.tweet-select-view .tweet-selector h2 { 
+    margin-top: 0;
 }
 
 .tweet-select-view .tweet-selector input {
     width: 100%;
     text-align: center;
     border: none;
-    border-bottom: 2px solid gray;
+    border-bottom: 2px solid var(--background-color);
     font-size: 1em;
+    outline: none;
+    text-overflow: ellipsis;
 }

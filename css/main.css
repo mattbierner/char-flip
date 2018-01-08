@@ -1,17 +1,17 @@
 @import url('./header.css');
 @import url('./loading_spinner.css');
+@import url('./footer.css');
 @import url('./tweet_view.css');
 @import url('./tweet_select_view.css');
 
 @import url('https://fonts.googleapis.com/css?family=VT323');
 
 
-
 :root {
     --background-color: #ff7b7b;
     --changed-character-color: #aefbbe;
     --page-color: white;
-    --content-color: #444;
+    --content-color: #555;
 }
 
 html {
@@ -30,6 +30,7 @@ body, #main {
     margin: 0;
     display: flex;
     flex-direction: column;
+    padding: 0 2em;
 }
 
 a {
@@ -49,16 +50,8 @@ a:hover {
 .content {
     width: 100%;
     max-width: 600px;
-    padding: 1em 2em;
     margin: 0 auto;
 }
-
-.editable-tweet {
-    font-size: 48px;
-    caret-color: transparent;
-}
-
-
 
 .material-icons {
     font-family: 'Material Icons';

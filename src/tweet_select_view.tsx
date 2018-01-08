@@ -4,7 +4,7 @@ import { fetchTweet } from './tweet_fetcher'
 import { Tweet } from './tweet';
 import { LoadingSpinner } from './loading_spinner';
 
-const exampleTweet = 'https://twitter.com/realDonaldTrump/status/949070800417640454'
+const exampleTweet = 'https://twitter.com/realDonaldTrump/status/950103659337134080'
 
 const parseUrl = (url: string): { userId: string, statusId: string } | undefined => {
     const match = url.match(/^https:\/\/twitter.com\/([^\\]+)\/status\/(\d+)$/)
@@ -42,8 +42,8 @@ export class TweetSelectView extends React.Component<TweetSelectViewProps, Tweet
         return (
             <div className='tweet-select-view'>
                 <h1>
-                    One change.<br />
-                    Make it count.
+                    One change<br />
+                    Make it count
                 </h1>
 
                 <div className='tweet-selector'>

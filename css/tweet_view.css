@@ -1,10 +1,16 @@
 .tweet {
     background: #fff;
     border-radius: 8px;
+    margin-top: 4rem;
 }
 
 .tweet > * {
     padding: 0 40px;
+}
+
+.editable-tweet {
+    font-size: 36px;
+    caret-color: transparent;
 }
 
 .tweet-diff-info .diff-char {

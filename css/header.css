@@ -1,9 +1,13 @@
 header {
-    margin-bottom: 2.5em;
     font-family: 'VT323', monospace;
     letter-spacing: 4px;
+    font-size: 1.3rem;
+    padding-top: 1.4em;
 }
 
+header h1 {
+    margin: 0;
+}
 
 header a,
 header a:hover {
