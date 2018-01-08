@@ -8,6 +8,7 @@
         "draft-js": "^0.10.4",
         "immutable": "^3.8.2",
         "jsonp-promise": "^0.1.2",
+        "lodash.debounce": "^4.0.8",
         "query-string": "^5.0.1",
         "react": "^16.2.0",
         "react-dom": "^16.2.0"
@@ -15,6 +16,7 @@
     "devDependencies": {
         "@types/draft-js": "^0.10.19",
         "@types/immutable": "^3.8.7",
+        "@types/lodash.debounce": "^4.0.3",
         "@types/node": "^8.0.7",
         "@types/query-string": "^5.0.1",
         "@types/react": "^16.0.34",

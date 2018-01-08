@@ -17,6 +17,7 @@
     display: inline-block;
     vertical-align: middle;
     padding: 4px;
+    white-space: pre;
 }
 
 .tweet-diff-info .diff-char.old-char {

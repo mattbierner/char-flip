@@ -1,20 +1,25 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import queryString = require('query-string');
+import queryString = require('query-string')
+const debounce = require('lodash.debounce')
 
 import { fetchTweet } from './tweet_fetcher'
 import { Tweet } from './tweet';
-import { TweetSelectView } from './tweet_select_view';
-import { TweetEditorView } from './tweet_editor_view';
-import { SymbolIndex } from './symbol_string';
-import { PageHeader } from './header';
-import { LoadingSpinner } from './loading_spinner';
+import { TweetSelectView } from './tweet_select_view'
+import { TweetEditorView } from './tweet_editor_view'
+import { SymbolIndex } from './symbol_string'
+import { PageHeader } from './header'
+import { LoadingSpinner } from './loading_spinner'
 
 enum Stage {
     Initial,
     SelectTweet,
     Editor
 }
+
+const replaceQueryString = debounce((qs: string) => {
+    history.replaceState(null, '', window.location.pathname + '?' + qs)
+}, 200)
 
 class PersistedState {
     public static readonly currentVersion = 1
@@ -61,7 +66,11 @@ class PersistedState {
             insertion: tweet.change ? tweet.change.insertion : undefined
         })
 
-        history.replaceState(null, '', window.location.pathname + '?' + qs);
+        try {
+            replaceQueryString(qs)
+        } catch {
+            // noop
+        }
     }
 }
 
