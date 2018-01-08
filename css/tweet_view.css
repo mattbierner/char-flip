@@ -80,6 +80,7 @@
     background: transparent;
     padding: 1.6em;
     border-left: 2px solid var(--background-color);
+    outline: none;
 }
 
 .controls button:first-child {

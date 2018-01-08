@@ -29772,6 +29772,18 @@ class TweetDiffInfo extends React.Component {
     }
 }
 class Controls extends React.Component {
+    constructor(props) {
+        super(props);
+        this.standardCopyLabel = 'copy link';
+        this.state = {
+            copyLabel: this.standardCopyLabel
+        };
+    }
+    componentWillReceiveProps(newProps) {
+        if (newProps.tweet !== this.props.tweet) {
+            this.setState({ copyLabel: this.standardCopyLabel });
+        }
+    }
     render() {
         return (React.createElement("div", { className: 'controls' },
             React.createElement("button", { title: 'reset', className: 'material-button', disabled: !this.props.tweet.change, onClick: this.props.onReset },
@@ -29779,13 +29791,24 @@ class Controls extends React.Component {
                 React.createElement("span", { className: 'label' }, "(reset)")),
             React.createElement("button", { title: 'copy link', disabled: !this.props.tweet.change, onClick: () => this.onShare() },
                 React.createElement("i", { className: 'material-icons' }, "link"),
-                React.createElement("span", { className: 'label' }, "(copy link)"))));
+                React.createElement("span", { className: 'label' },
+                    "(",
+                    this.state.copyLabel,
+                    ")"))));
     }
     onShare() {
         if (!this.props.tweet.change) {
             return;
         }
         copy(window.location);
+        this.setState({ copyLabel: 'copied link to tweet' });
+        if (this.copyLabelTimer) {
+            clearTimeout(this.copyLabelTimer);
+        }
+        this.copyLabelTimer = setTimeout(() => {
+            this.copyLabelTimer = undefined;
+            this.setState({ copyLabel: this.standardCopyLabel });
+        }, 2000);
     }
 }
 class TweetEditorView extends React.Component {

@@ -23,7 +23,30 @@ class TweetDiffInfo extends React.Component<{ tweet: Tweet }> {
     }
 }
 
-class Controls extends React.Component<{ tweet: Tweet, onReset: () => void }, {}> {
+interface ControlsProps {
+    tweet: Tweet
+    onReset(): void
+}
+
+class Controls extends React.Component<ControlsProps, { copyLabel: string }> {
+    private readonly standardCopyLabel = 'copy link'
+
+    private copyLabelTimer?: NodeJS.Timer;
+
+    constructor(props: ControlsProps) {
+        super(props)
+
+        this.state = {
+            copyLabel: this.standardCopyLabel
+        }
+    }
+
+    componentWillReceiveProps(newProps: ControlsProps) {
+        if (newProps.tweet !== this.props.tweet) {
+            this.setState({ copyLabel: this.standardCopyLabel })
+        }
+    }
+
     render() {
         return (
             <div className='controls'>
@@ -37,7 +60,7 @@ class Controls extends React.Component<{ tweet: Tweet, onReset: () => void }, {}
                     title='copy link'
                     disabled={!this.props.tweet.change}
                     onClick={() => this.onShare()}
-                ><i className='material-icons'>link</i><span className='label'>(copy link)</span></button>
+                ><i className='material-icons'>link</i><span className='label'>({this.state.copyLabel})</span></button>
             </div>
         )
     }
@@ -47,6 +70,16 @@ class Controls extends React.Component<{ tweet: Tweet, onReset: () => void }, {}
         }
 
         copy(window.location)
+        this.setState({ copyLabel: 'copied link to tweet' })
+
+        if (this.copyLabelTimer) {
+            clearTimeout(this.copyLabelTimer)
+        }
+
+        this.copyLabelTimer = setTimeout(() => {
+            this.copyLabelTimer = undefined
+            this.setState({ copyLabel: this.standardCopyLabel })
+        }, 2000)
     }
 }
 
