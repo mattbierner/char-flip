@@ -1,15 +1,13 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import queryString = require('query-string')
-const debounce = require('lodash.debounce')
 
 import { fetchTweet } from './tweet_fetcher'
 import { Tweet } from './tweet';
 import { TweetSelectView } from './tweet_select_view'
 import { TweetEditorView } from './tweet_editor_view'
-import { SymbolIndex } from './symbol_string'
 import { PageHeader } from './header'
 import { LoadingSpinner } from './loading_spinner'
+import { PersistedState } from './persist_state';
 
 enum Stage {
     Initial,
@@ -17,62 +15,6 @@ enum Stage {
     Editor
 }
 
-const replaceQueryString = debounce((qs: string) => {
-    history.replaceState(null, '', window.location.pathname + '?' + qs)
-}, 200)
-
-class PersistedState {
-    public static readonly currentVersion = 1
-
-    private constructor(
-        public readonly authorId: string,
-        public readonly statusId: string,
-        public readonly offset: SymbolIndex | undefined,
-        public readonly insertion: string | undefined
-    ) { }
-
-    public static tryGetFromQueryString(): PersistedState | undefined {
-        const qs = queryString.parse(location.search)
-        if (isNaN(qs.version) || !qs.authorId || !qs.statusId) {
-            return undefined
-        }
-
-        if (+qs.version !== PersistedState.currentVersion) {
-            return undefined
-        }
-
-        if (isNaN(qs.offset) || Array.from(qs.insertion).length !== 1) {
-            return new PersistedState(
-                qs.authorId,
-                qs.statusId,
-                undefined,
-                undefined)
-        }
-
-        return new PersistedState(
-            qs.authorId,
-            qs.statusId,
-            SymbolIndex.create(+qs.offset),
-            qs.insertion
-        )
-    }
-
-    public static persist(tweet: Tweet): void {
-        const qs = queryString.stringify({
-            version: PersistedState.currentVersion,
-            authorId: tweet.metadata.authorId,
-            statusId: tweet.metadata.statusId,
-            offset: tweet.change ? tweet.change.offset.value : undefined,
-            insertion: tweet.change ? tweet.change.insertion : undefined
-        })
-
-        try {
-            replaceQueryString(qs)
-        } catch {
-            // noop
-        }
-    }
-}
 
 interface MainState {
     stage: Stage
@@ -103,7 +45,7 @@ class Main extends React.Component<{}, MainState> {
                         stage: Stage.Editor
                     })
                 })
-                .catch(e => {
+                .catch(() => {
                     this.setState({
                         stage: Stage.SelectTweet,
                         initialLoadingError: 'Invalid page'

@@ -3,6 +3,7 @@ const copy = require('copy-to-clipboard')
 
 import { Tweet } from './tweet';
 import { TweetEditor } from './tweet_editor';
+import { PersistedState } from './persist_state';
 
 class TweetDiffInfo extends React.PureComponent<{ tweet: Tweet }> {
     render() {
@@ -89,7 +90,7 @@ class Controls extends React.Component<ControlsProps, { copyLabel: string }> {
             return
         }
 
-        copy(window.location)
+        copy(PersistedState.getUrl(this.props.tweet))
         this.setState({ copyLabel: 'copied link to clipboard' })
 
         if (this.copyLabelTimer) {

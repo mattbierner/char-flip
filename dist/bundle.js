@@ -11903,60 +11903,18 @@ module.exports = DraftStringKey;
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(5);
 const ReactDOM = __webpack_require__(15);
-const queryString = __webpack_require__(82);
-const debounce = __webpack_require__(185);
 const tweet_fetcher_1 = __webpack_require__(47);
 const tweet_select_view_1 = __webpack_require__(88);
 const tweet_editor_view_1 = __webpack_require__(89);
-const symbol_string_1 = __webpack_require__(179);
 const header_1 = __webpack_require__(182);
 const loading_spinner_1 = __webpack_require__(181);
+const persist_state_1 = __webpack_require__(186);
 var Stage;
 (function (Stage) {
     Stage[Stage["Initial"] = 0] = "Initial";
     Stage[Stage["SelectTweet"] = 1] = "SelectTweet";
     Stage[Stage["Editor"] = 2] = "Editor";
 })(Stage || (Stage = {}));
-const replaceQueryString = debounce((qs) => {
-    history.replaceState(null, '', window.location.pathname + '?' + qs);
-}, 200);
-class PersistedState {
-    constructor(authorId, statusId, offset, insertion) {
-        this.authorId = authorId;
-        this.statusId = statusId;
-        this.offset = offset;
-        this.insertion = insertion;
-    }
-    static tryGetFromQueryString() {
-        const qs = queryString.parse(location.search);
-        if (isNaN(qs.version) || !qs.authorId || !qs.statusId) {
-            return undefined;
-        }
-        if (+qs.version !== PersistedState.currentVersion) {
-            return undefined;
-        }
-        if (isNaN(qs.offset) || Array.from(qs.insertion).length !== 1) {
-            return new PersistedState(qs.authorId, qs.statusId, undefined, undefined);
-        }
-        return new PersistedState(qs.authorId, qs.statusId, symbol_string_1.SymbolIndex.create(+qs.offset), qs.insertion);
-    }
-    static persist(tweet) {
-        const qs = queryString.stringify({
-            version: PersistedState.currentVersion,
-            authorId: tweet.metadata.authorId,
-            statusId: tweet.metadata.statusId,
-            offset: tweet.change ? tweet.change.offset.value : undefined,
-            insertion: tweet.change ? tweet.change.insertion : undefined
-        });
-        try {
-            replaceQueryString(qs);
-        }
-        catch (_a) {
-            // noop
-        }
-    }
-}
-PersistedState.currentVersion = 1;
 class Main extends React.Component {
     constructor(props) {
         super(props);
@@ -11965,7 +11923,7 @@ class Main extends React.Component {
         };
     }
     componentWillMount() {
-        const persistedState = PersistedState.tryGetFromQueryString();
+        const persistedState = persist_state_1.PersistedState.tryGetFromQueryString();
         if (persistedState) {
             tweet_fetcher_1.fetchTweet(persistedState.authorId, persistedState.statusId)
                 .then(tweet => {
@@ -11977,7 +11935,7 @@ class Main extends React.Component {
                     stage: Stage.Editor
                 });
             })
-                .catch(e => {
+                .catch(() => {
                 this.setState({
                     stage: Stage.SelectTweet,
                     initialLoadingError: 'Invalid page'
@@ -12009,7 +11967,7 @@ class Main extends React.Component {
     }
     onUpdateTweet(tweet) {
         this.setState({ tweet, stage: Stage.Editor });
-        PersistedState.persist(tweet);
+        persist_state_1.PersistedState.persist(tweet);
     }
 }
 ReactDOM.render(React.createElement(Main, null), document.getElementById('main'));
@@ -29796,6 +29754,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(5);
 const copy = __webpack_require__(90);
 const tweet_editor_1 = __webpack_require__(92);
+const persist_state_1 = __webpack_require__(186);
 class TweetDiffInfo extends React.PureComponent {
     render() {
         const { tweet } = this.props;
@@ -29854,7 +29813,7 @@ class Controls extends React.Component {
         if (!this.props.tweet.change) {
             return;
         }
-        copy(window.location);
+        copy(persist_state_1.PersistedState.getUrl(this.props.tweet));
         this.setState({ copyLabel: 'copied link to clipboard' });
         if (this.copyLabelTimer) {
             clearTimeout(this.copyLabelTimer);
@@ -43847,6 +43806,62 @@ function toNumber(value) {
 module.exports = debounce;
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(12)))
+
+/***/ }),
+/* 186 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const queryString = __webpack_require__(82);
+const debounce = __webpack_require__(185);
+const symbol_string_1 = __webpack_require__(179);
+const replaceQueryString = debounce((qs) => {
+    history.replaceState(null, '', window.location.pathname + '?' + qs);
+}, 200);
+class PersistedState {
+    constructor(authorId, statusId, offset, insertion) {
+        this.authorId = authorId;
+        this.statusId = statusId;
+        this.offset = offset;
+        this.insertion = insertion;
+    }
+    static tryGetFromQueryString() {
+        const qs = queryString.parse(location.search);
+        if (isNaN(qs.version) || !qs.authorId || !qs.statusId) {
+            return undefined;
+        }
+        if (+qs.version !== PersistedState.currentVersion) {
+            return undefined;
+        }
+        if (isNaN(qs.offset) || Array.from(qs.insertion).length !== 1) {
+            return new PersistedState(qs.authorId, qs.statusId, undefined, undefined);
+        }
+        return new PersistedState(qs.authorId, qs.statusId, symbol_string_1.SymbolIndex.create(+qs.offset), qs.insertion);
+    }
+    static persist(tweet) {
+        try {
+            replaceQueryString(PersistedState.getUrl(tweet));
+        }
+        catch (_a) {
+            // noop
+        }
+    }
+    static getUrl(tweet) {
+        const qs = queryString.stringify({
+            version: PersistedState.currentVersion,
+            authorId: tweet.metadata.authorId,
+            statusId: tweet.metadata.statusId,
+            offset: tweet.change ? tweet.change.offset.value : undefined,
+            insertion: tweet.change ? tweet.change.insertion : undefined
+        });
+        return window.location.pathname + '?' + qs;
+    }
+}
+PersistedState.currentVersion = 1;
+exports.PersistedState = PersistedState;
+
 
 /***/ })
 /******/ ]);
