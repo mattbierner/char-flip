@@ -122,22 +122,14 @@ export class TweetEditor extends React.Component<TweetProps, TweetState> {
     }
 
     private newContentForEdited(edited: Tweet, selection?: SelectionState) {
-        const isAtIndex = (i: number, indexToCheck: number): boolean => {
-            if (i === indexToCheck) {
-                return true
-            }
-            const entry = edited.charToSymbolMap[i]
-            return entry === indexToCheck
-        }
-
         const empty = immutable.OrderedSet([])
         const selected = immutable.OrderedSet(['selected'])
         const changed = immutable.OrderedSet(['changed'])
         const selectedAndChanged = immutable.OrderedSet(['selected', 'changed'])
 
         const characterList = immutable.List(edited.editedText.characters.map((_, i) => {
-            const s = !!selection && isAtIndex(i, selection.getStartOffset())
-            const c = !!edited.change && isAtIndex(i, edited.change.offset.value)
+            const s = !!selection && edited.editedText.toSymbolIndex(i).value === edited.editedText.toSymbolIndex(selection.getStartOffset()).value
+            const c = !!edited.change && i === edited.editedText.toCharacterIndex(edited.change.offset)
             return CharacterMetadata.create({
                 style: s
                     ? (c ? selectedAndChanged : selected)

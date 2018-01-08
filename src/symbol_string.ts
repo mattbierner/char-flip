@@ -38,4 +38,9 @@ export class SymbolString {
 
         return SymbolIndex.create(charIndex)
     }
+
+    public toCharacterIndex(symbolIndex: SymbolIndex): number {
+        return this.symbols.slice(0, symbolIndex.value)
+            .reduce((sum, c) => sum + c.length, 0)
+    }
 }

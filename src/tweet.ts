@@ -11,8 +11,6 @@ export interface TweetMetadata {
 }
 
 export class Tweet {
-    private _charToSymbolMap?: number[]
-
     public static create(metadata: TweetMetadata, text: string) {
         return new Tweet(
             metadata,
@@ -38,25 +36,8 @@ export class Tweet {
         return this.originalText.replaceSymbolAt(this.change.offset, this.change.insertion)
     }
 
-    public get charToSymbolMap(): number[] {
-        if (!this._charToSymbolMap) {
-            // Hacky: We operate on symbols while js splits unicode/emoji
-            // Create mapping between these
-            this._charToSymbolMap = this.editedText.symbols
-                .reduce((p, text) => {
-                    const split = text.split('')
-                    p.sum.push(...split.map(() => p.offset))
-                    return {
-                        offset: p.offset += split.length,
-                        sum: p.sum
-                    }
-                }, { offset: 0, sum: [] as number[] }).sum
-        }
-        return this._charToSymbolMap;
-    }
-
     public flipAt(offset: SymbolIndex, key: string): Tweet {
-        if (this.originalText.symbols[offset.value] === key) {
+        if (this.originalText.symbols[offset.value] === key || offset.value >= this.originalText.symbols.length) {
             return new Tweet(this.metadata, this.originalText, undefined)
         }
 

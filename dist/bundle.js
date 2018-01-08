@@ -9071,7 +9071,7 @@ const fetchTweetContent = (authorId, statusId) => __awaiter(this, void 0, void 0
         throw 'Found author id does not match tweet author id';
     }
     return {
-        text: body.textContent || '',
+        text: '😀😀x',
         metadata: {
             url: result.url,
             authorId: foundAuthorId,
@@ -9125,6 +9125,10 @@ class SymbolString {
             ++symbolIndex;
         }
         return SymbolIndex.create(charIndex);
+    }
+    toCharacterIndex(symbolIndex) {
+        return this.symbols.slice(0, symbolIndex.value)
+            .reduce((sum, c) => sum + c.length, 0);
     }
 }
 exports.SymbolString = SymbolString;
@@ -29666,24 +29670,8 @@ class Tweet {
         }
         return this.originalText.replaceSymbolAt(this.change.offset, this.change.insertion);
     }
-    get charToSymbolMap() {
-        if (!this._charToSymbolMap) {
-            // Hacky: We operate on symbols while js splits unicode/emoji
-            // Create mapping between these
-            this._charToSymbolMap = this.editedText.symbols
-                .reduce((p, text) => {
-                const split = text.split('');
-                p.sum.push(...split.map(() => p.offset));
-                return {
-                    offset: p.offset += split.length,
-                    sum: p.sum
-                };
-            }, { offset: 0, sum: [] }).sum;
-        }
-        return this._charToSymbolMap;
-    }
     flipAt(offset, key) {
-        if (this.originalText.symbols[offset.value] === key) {
+        if (this.originalText.symbols[offset.value] === key || offset.value >= this.originalText.symbols.length) {
             return new Tweet(this.metadata, this.originalText, undefined);
         }
         return new Tweet(this.metadata, this.originalText, {
@@ -30085,20 +30073,13 @@ class TweetEditor extends React.Component {
         return 'handled';
     }
     newContentForEdited(edited, selection) {
-        const isAtIndex = (i, indexToCheck) => {
-            if (i === indexToCheck) {
-                return true;
-            }
-            const entry = edited.charToSymbolMap[i];
-            return entry === indexToCheck;
-        };
         const empty = immutable.OrderedSet([]);
         const selected = immutable.OrderedSet(['selected']);
         const changed = immutable.OrderedSet(['changed']);
         const selectedAndChanged = immutable.OrderedSet(['selected', 'changed']);
         const characterList = immutable.List(edited.editedText.characters.map((_, i) => {
-            const s = !!selection && isAtIndex(i, selection.getStartOffset());
-            const c = !!edited.change && isAtIndex(i, edited.change.offset.value);
+            const s = !!selection && edited.editedText.toSymbolIndex(i).value === edited.editedText.toSymbolIndex(selection.getStartOffset()).value;
+            const c = !!edited.change && i === edited.editedText.toCharacterIndex(edited.change.offset);
             return draft_js_1.CharacterMetadata.create({
                 style: s
                     ? (c ? selectedAndChanged : selected)
