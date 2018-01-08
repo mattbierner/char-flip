@@ -43307,6 +43307,15 @@ const React = __webpack_require__(5);
 const timers_1 = __webpack_require__(183);
 const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 const randomChar = () => possible[Math.floor(Math.random() * possible.length)];
+class FlippableCharacter extends React.PureComponent {
+    render() {
+        return (React.createElement("span", { className: 'flip-container ' + (this.props.flipped ? 'flipped' : '') },
+            React.createElement("span", { className: 'flipper' },
+                React.createElement("span", { className: 'original' }, this.props.original),
+                React.createElement("span", { className: 'new' }, this.props.new),
+                React.createElement("span", { style: { visibility: 'hidden' } }, this.props.original))));
+    }
+}
 class PageHeader extends React.Component {
     constructor(props) {
         super(props);
@@ -43328,11 +43337,7 @@ class PageHeader extends React.Component {
     }
     render() {
         const text = this.title.split('').map((x, i) => {
-            return React.createElement("span", { key: i, className: 'flip-container ' + (i === this.state.index ? 'flipped' : '') },
-                React.createElement("span", { className: 'flipper' },
-                    React.createElement("span", { className: 'original' }, x),
-                    React.createElement("span", { className: 'new' }, i === this.state.oldIndex ? this.state.oldReplacement : this.state.replacement),
-                    React.createElement("span", { style: { visibility: 'hidden' } }, x)));
+            return React.createElement(FlippableCharacter, { key: i, original: x, new: i === this.state.oldIndex ? this.state.oldReplacement : this.state.replacement, flipped: this.props.active && i === this.state.index });
         });
         return (React.createElement("header", { className: "page-header" },
             React.createElement("h1", null,

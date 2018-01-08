@@ -5,6 +5,21 @@ const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
 
 const randomChar = () => possible[Math.floor(Math.random() * possible.length)]
 
+
+class FlippableCharacter extends React.PureComponent<{ original: string, new: string, flipped: boolean }> {
+    render() {
+        return (
+            <span className={'flip-container ' + (this.props.flipped ? 'flipped' : '')}>
+                <span className='flipper'>
+                    <span className='original'>{this.props.original}</span>
+                    <span className='new'>{this.props.new}</span>
+                    <span style={{ visibility: 'hidden' }}>{this.props.original}</span>
+                </span>
+            </span>
+        )
+    }
+}
+
 interface PageHeaderProps {
     active: boolean
 }
@@ -44,17 +59,14 @@ export class PageHeader extends React.Component<PageHeaderProps, PageHeaderState
 
     render() {
         const text = this.title.split('').map((x, i) => {
-            return <span key={i} className={'flip-container ' + (i === this.state.index ? 'flipped' : '')}>
-                <span className='flipper'>
-                    <span className='original'>{x}</span>
-                    <span className='new'>{i === this.state.oldIndex ? this.state.oldReplacement : this.state.replacement}</span>
-                    <span style={{ visibility: 'hidden' }}>{x}</span>
-                </span>
-            </span>
+            return <FlippableCharacter key={i}
+                original={x}
+                new={i === this.state.oldIndex ? this.state.oldReplacement : this.state.replacement}
+                flipped={this.props.active && i === this.state.index} />
         })
 
         return (
-            <header className="page-header">
+            <header className="page-header" >
                 <h1><a href=".">{text}</a></h1>
             </header>
         )
