@@ -29775,9 +29775,11 @@ class Controls extends React.Component {
     render() {
         return (React.createElement("div", { className: 'controls' },
             React.createElement("button", { title: 'reset', className: 'material-button', disabled: !this.props.tweet.change, onClick: this.props.onReset },
-                React.createElement("i", { className: 'material-icons' }, "undo")),
+                React.createElement("i", { className: 'material-icons' }, "undo"),
+                React.createElement("span", { className: 'label' }, "(reset)")),
             React.createElement("button", { title: 'copy link', disabled: !this.props.tweet.change, onClick: () => this.onShare() },
-                React.createElement("i", { className: 'material-icons' }, "link"))));
+                React.createElement("i", { className: 'material-icons' }, "link"),
+                React.createElement("span", { className: 'label' }, "(copy link)"))));
     }
     onShare() {
         if (!this.props.tweet.change) {

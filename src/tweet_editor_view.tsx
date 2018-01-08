@@ -23,7 +23,7 @@ class TweetDiffInfo extends React.Component<{ tweet: Tweet }> {
     }
 }
 
-class Controls extends React.Component<{ tweet: Tweet, onReset: () => void }> {
+class Controls extends React.Component<{ tweet: Tweet, onReset: () => void }, {}> {
     render() {
         return (
             <div className='controls'>
@@ -32,12 +32,12 @@ class Controls extends React.Component<{ tweet: Tweet, onReset: () => void }> {
                     className='material-button'
                     disabled={!this.props.tweet.change}
                     onClick={this.props.onReset}
-                ><i className='material-icons'>undo</i></button>
+                ><i className='material-icons'>undo</i><span className='label'>(reset)</span></button>
                 <button
                     title='copy link'
                     disabled={!this.props.tweet.change}
                     onClick={() => this.onShare()}
-                ><i className='material-icons'>link</i></button>
+                ><i className='material-icons'>link</i><span className='label'>(copy link)</span></button>
             </div>
         )
     }
