@@ -63,17 +63,36 @@
 }
 
 .tweet-footer {
-    border-top: 1px solid var(--background-color);
+    border-top: 2px solid var(--background-color);
     margin-top: 1em;
-    padding-top: 1em;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.controls {
+    display: flex;
 }
 
 .controls button {
-    border-radius: 100px;
-    width: 60px;
-    height: 60px;
-    border: 1px sold gray;
-    background: white;
+    flex: 1;
+    display: block;
+    border: none;
+    background: transparent;
+    padding: 1.6em;
+    border-left: 2px solid var(--background-color);
+}
+
+.controls button:first-child {
+    border-bottom-left-radius: 8px;
+    border-left: none;
+}
+
+.controls button:last-child {
+    border-bottom-right-radius: 8px;
+}
+
+.controls button:hover:enabled { 
+    background: #aaa3;
 }
 
 @keyframes cursor-blink {
