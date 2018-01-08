@@ -10,11 +10,11 @@ export interface TweetMetadata {
     readonly authorUrl: string
 }
 
-export class EditedTweet {
+export class Tweet {
     private _charToSymbolMap?: number[]
 
     public static create(metadata: TweetMetadata, text: string) {
-        return new EditedTweet(
+        return new Tweet(
             metadata,
             new SymbolString(text),
             undefined
@@ -51,22 +51,22 @@ export class EditedTweet {
         return this._charToSymbolMap;
     }
 
-    public flipAt(offset: SymbolIndex, key: string): EditedTweet {
+    public flipAt(offset: SymbolIndex, key: string): Tweet {
         if (this.originalText.symbols[offset.value] === key) {
-            return new EditedTweet(this.metadata, this.originalText, undefined)
+            return new Tweet(this.metadata, this.originalText, undefined)
         }
 
-        return new EditedTweet(this.metadata, this.originalText, {
+        return new Tweet(this.metadata, this.originalText, {
             offset,
             insertion: key
         })
     }
 
-    public reset(): EditedTweet {
+    public reset(): Tweet {
         if (!this.change) {
             return this
         }
 
-        return new EditedTweet(this.metadata, this.originalText, undefined);
+        return new Tweet(this.metadata, this.originalText, undefined);
     }
 }

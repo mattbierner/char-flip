@@ -1,10 +1,10 @@
 import * as React from 'react'
 const copy = require('copy-to-clipboard')
 
-import { EditedTweet } from './tweet';
+import { Tweet } from './tweet';
 import { TweetEditor } from './tweet_editor';
 
-class TweetDiffInfo extends React.Component<{ tweet: EditedTweet }> {
+class TweetDiffInfo extends React.Component<{ tweet: Tweet }> {
     render() {
         const { tweet } = this.props
         if (!tweet.change) {
@@ -26,7 +26,7 @@ class TweetDiffInfo extends React.Component<{ tweet: EditedTweet }> {
     }
 }
 
-class Controls extends React.Component<{ tweet: EditedTweet, onReset: () => void }> {
+class Controls extends React.Component<{ tweet: Tweet, onReset: () => void }> {
     render() {
         return (
             <div className='controls'>
@@ -52,8 +52,8 @@ class Controls extends React.Component<{ tweet: EditedTweet, onReset: () => void
 
 
 interface TweetEditorViewProps {
-    tweet: EditedTweet
-    onChangeTweet(edited: EditedTweet): void
+    tweet: Tweet
+    onChangeTweet(edited: Tweet): void
 }
 
 export class TweetEditorView extends React.Component<TweetEditorViewProps> {

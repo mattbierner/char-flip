@@ -1,7 +1,7 @@
 const jsonp = require('jsonp-promise')
 const buildUrl = require('build-url')
 
-import { EditedTweet, TweetMetadata } from './tweet'
+import { Tweet, TweetMetadata } from './tweet'
 
 const getTweetUrl = (userId: string, statusId: string): string | null => {
     if (!statusId.match(/^\d+$/)) {
@@ -68,7 +68,7 @@ const fetchTweetContent = async (authorId: string, statusId: string): Promise<Tw
     }
 }
 
-export const fetchTweet = async (authorId: string, statusId: string): Promise<EditedTweet> => {
+export const fetchTweet = async (authorId: string, statusId: string): Promise<Tweet> => {
     const content = await fetchTweetContent(authorId, statusId)
-    return EditedTweet.create(content.metadata, content.text)
+    return Tweet.create(content.metadata, content.text)
 }

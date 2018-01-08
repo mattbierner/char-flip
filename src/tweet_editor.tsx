@@ -2,12 +2,12 @@ import * as React from 'react'
 import * as immutable from 'immutable'
 import { Editor, EditorState, ContentState, SelectionState, ContentBlock, CharacterMetadata } from 'draft-js'
 
-import { EditedTweet } from './tweet'
+import { Tweet } from './tweet'
 
 
 interface TweetProps {
-    tweet: EditedTweet
-    onChangeTweet(edited: EditedTweet): void
+    tweet: Tweet
+    onChangeTweet(edited: Tweet): void
 }
 
 interface TweetState {
@@ -106,7 +106,7 @@ export class TweetEditor extends React.Component<TweetProps, TweetState> {
         return 'handled'
     }
 
-    private newContentForEdited(edited: EditedTweet, selection?: SelectionState) {
+    private newContentForEdited(edited: Tweet, selection?: SelectionState) {
         const isAtIndex = (i: number, indexToCheck: number): boolean => {
             if (i === indexToCheck) {
                 return true

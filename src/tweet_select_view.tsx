@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { fetchTweet } from './tweet_fetcher'
-import { EditedTweet } from './tweet';
+import { Tweet } from './tweet';
 
 const exampleTweet = 'https://twitter.com/realDonaldTrump/status/949070800417640454'
 
@@ -17,7 +17,7 @@ const parseUrl = (url: string): { userId: string, statusId: string } | undefined
 }
 
 interface TweetSelectViewProps {
-    onDidSelectTweet(tweet: EditedTweet): void
+    onDidSelectTweet(tweet: Tweet): void
 }
 
 interface TweetSelectViewState {

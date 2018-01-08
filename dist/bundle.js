@@ -9077,7 +9077,7 @@ const fetchTweetContent = (authorId, statusId) => __awaiter(this, void 0, void 0
 });
 exports.fetchTweet = (authorId, statusId) => __awaiter(this, void 0, void 0, function* () {
     const content = yield fetchTweetContent(authorId, statusId);
-    return tweet_1.EditedTweet.create(content.metadata, content.text);
+    return tweet_1.Tweet.create(content.metadata, content.text);
 });
 
 
@@ -43171,14 +43171,14 @@ exports.SymbolString = SymbolString;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const symbol_string_1 = __webpack_require__(179);
-class EditedTweet {
+class Tweet {
     constructor(metadata, originalText, change) {
         this.metadata = metadata;
         this.originalText = originalText;
         this.change = change;
     }
     static create(metadata, text) {
-        return new EditedTweet(metadata, new symbol_string_1.SymbolString(text), undefined);
+        return new Tweet(metadata, new symbol_string_1.SymbolString(text), undefined);
     }
     get editedText() {
         if (!this.change) {
@@ -43204,9 +43204,9 @@ class EditedTweet {
     }
     flipAt(offset, key) {
         if (this.originalText.symbols[offset.value] === key) {
-            return new EditedTweet(this.metadata, this.originalText, undefined);
+            return new Tweet(this.metadata, this.originalText, undefined);
         }
-        return new EditedTweet(this.metadata, this.originalText, {
+        return new Tweet(this.metadata, this.originalText, {
             offset,
             insertion: key
         });
@@ -43215,10 +43215,10 @@ class EditedTweet {
         if (!this.change) {
             return this;
         }
-        return new EditedTweet(this.metadata, this.originalText, undefined);
+        return new Tweet(this.metadata, this.originalText, undefined);
     }
 }
-exports.EditedTweet = EditedTweet;
+exports.Tweet = Tweet;
 
 
 /***/ })

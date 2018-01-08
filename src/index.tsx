@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom'
 import queryString = require('query-string');
 
 import { fetchTweet } from './tweet_fetcher'
-import { EditedTweet } from './tweet';
+import { Tweet } from './tweet';
 import { TweetSelectView } from './tweet_select_view';
 import { TweetEditorView } from './tweet_editor_view';
 import { SymbolIndex } from './symbol_string';
@@ -50,7 +50,7 @@ class PersistedState {
         )
     }
 
-    public static persist(tweet: EditedTweet): void {
+    public static persist(tweet: Tweet): void {
         const qs = queryString.stringify({
             version: PersistedState.currentVersion,
             authorId: tweet.metadata.authorId,
@@ -65,7 +65,7 @@ class PersistedState {
 
 interface MainState {
     stage: Stage,
-    tweet?: EditedTweet
+    tweet?: Tweet
 }
 
 class Main extends React.Component<{}, MainState> {
@@ -126,7 +126,7 @@ class Main extends React.Component<{}, MainState> {
         )
     }
 
-    private onUpdateTweet(tweet: EditedTweet): void {
+    private onUpdateTweet(tweet: Tweet): void {
         this.setState({ tweet, stage: Stage.Editor })
         PersistedState.persist(tweet)
     }
