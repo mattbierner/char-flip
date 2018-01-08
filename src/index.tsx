@@ -8,6 +8,7 @@ import { TweetSelectView } from './tweet_select_view';
 import { TweetEditorView } from './tweet_editor_view';
 import { SymbolIndex } from './symbol_string';
 import { PageHeader } from './header';
+import { LoadingSpinner } from './loading_spinner';
 
 enum Stage {
     Initial,
@@ -65,8 +66,9 @@ class PersistedState {
 }
 
 interface MainState {
-    stage: Stage,
+    stage: Stage
     tweet?: Tweet
+    initialLoadingError?: string
 }
 
 class Main extends React.Component<{}, MainState> {
@@ -92,9 +94,10 @@ class Main extends React.Component<{}, MainState> {
                         stage: Stage.Editor
                     })
                 })
-                .catch(() => {
+                .catch(e => {
                     this.setState({
-                        stage: Stage.SelectTweet
+                        stage: Stage.SelectTweet,
+                        initialLoadingError: 'Invalid page'
                     })
                 })
         } else {
@@ -108,7 +111,8 @@ class Main extends React.Component<{}, MainState> {
             body = (
                 <div className='content'>
                     <TweetSelectView
-                        onDidSelectTweet={tweet => this.onUpdateTweet(tweet)} />
+                        onDidSelectTweet={tweet => this.onUpdateTweet(tweet)}
+                        initialError={this.state.initialLoadingError} />
                 </div>
             )
         } else if (this.state.stage === Stage.Editor) {
@@ -121,7 +125,11 @@ class Main extends React.Component<{}, MainState> {
             )
         } else {
             body = (
-                <div className='content'>Loading</div>
+                <div className='content loading'>
+                    <div>
+                        <LoadingSpinner active={true} />
+                    </div>
+                </div>
             )
         }
 

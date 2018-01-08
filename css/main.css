@@ -56,6 +56,18 @@ a:hover {
     margin: 0 auto;
 }
 
+.loading {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loading .loading-spinner {
+    color: var(--page-color);
+    font-size: 2em;
+}
+
 .material-icons {
     font-family: 'Material Icons';
     font-weight: normal;

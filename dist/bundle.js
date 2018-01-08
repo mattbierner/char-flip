@@ -9063,14 +9063,22 @@ const fetchTweetContent = (authorId, statusId) => __awaiter(this, void 0, void 0
     if (links && links.length) {
         postDate = links[links.length - 1].textContent || '';
     }
+    const authorMatch = result.author_url.match(/\/([^\/]+?)$/);
+    if (!authorMatch) {
+        throw 'Invalid author';
+    }
+    const foundAuthorId = authorMatch[1];
+    if (authorId !== foundAuthorId) {
+        throw 'Found author id does not match tweet author id';
+    }
     return {
         text: body.textContent || '',
         metadata: {
             url: result.url,
-            authorId,
+            authorId: foundAuthorId,
             statusId,
             postDate,
-            authorName: result.author_name,
+            authorName: result.author_url,
             authorUrl: result.author_url
         }
     };
@@ -11902,6 +11910,7 @@ const tweet_select_view_1 = __webpack_require__(88);
 const tweet_editor_view_1 = __webpack_require__(89);
 const symbol_string_1 = __webpack_require__(179);
 const header_1 = __webpack_require__(182);
+const loading_spinner_1 = __webpack_require__(181);
 var Stage;
 (function (Stage) {
     Stage[Stage["Initial"] = 0] = "Initial";
@@ -11960,9 +11969,10 @@ class Main extends React.Component {
                     stage: Stage.Editor
                 });
             })
-                .catch(() => {
+                .catch(e => {
                 this.setState({
-                    stage: Stage.SelectTweet
+                    stage: Stage.SelectTweet,
+                    initialLoadingError: 'Invalid page'
                 });
             });
         }
@@ -11974,14 +11984,16 @@ class Main extends React.Component {
         let body;
         if (this.state.stage === Stage.SelectTweet) {
             body = (React.createElement("div", { className: 'content' },
-                React.createElement(tweet_select_view_1.TweetSelectView, { onDidSelectTweet: tweet => this.onUpdateTweet(tweet) })));
+                React.createElement(tweet_select_view_1.TweetSelectView, { onDidSelectTweet: tweet => this.onUpdateTweet(tweet), initialError: this.state.initialLoadingError })));
         }
         else if (this.state.stage === Stage.Editor) {
             body = (React.createElement("div", { className: 'content' },
                 React.createElement(tweet_editor_view_1.TweetEditorView, { tweet: this.state.tweet, onChangeTweet: tweet => this.onUpdateTweet(tweet) })));
         }
         else {
-            body = (React.createElement("div", { className: 'content' }, "Loading"));
+            body = (React.createElement("div", { className: 'content loading' },
+                React.createElement("div", null,
+                    React.createElement(loading_spinner_1.LoadingSpinner, { active: true }))));
         }
         return (React.createElement(React.Fragment, null,
             React.createElement(header_1.PageHeader, { active: this.state.stage !== Stage.Editor }),
@@ -29712,7 +29724,7 @@ class TweetSelectView extends React.Component {
         this.state = {
             loading: false,
             value: exampleTweet,
-            error: undefined
+            error: props.initialError
         };
     }
     render() {
@@ -29723,7 +29735,10 @@ class TweetSelectView extends React.Component {
                 "Make it count"),
             React.createElement("div", { className: 'tweet-selector' },
                 React.createElement("h2", null, "Enter tweet url"),
-                React.createElement("div", null, this.state.error),
+                this.state.error && React.createElement("div", { className: 'error' },
+                    "Error: \uFE0F",
+                    this.state.error,
+                    "\uFE0F\uFE0F"),
                 this.state.loading
                     ? React.createElement(loading_spinner_1.LoadingSpinner, { active: true })
                     :
@@ -29757,7 +29772,10 @@ class TweetSelectView extends React.Component {
             this.props.onDidSelectTweet(tweet);
         })
             .catch(() => {
-            this.setState({ loading: false, error: 'Could not load tweet' });
+            this.setState({
+                loading: false,
+                error: 'Could not load tweet. Please try again'
+            });
         });
     }
 }
@@ -43319,9 +43337,8 @@ exports.LoadingSpinner = LoadingSpinner;
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(5);
 const timers_1 = __webpack_require__(183);
-const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 const randomChar = () => possible[Math.floor(Math.random() * possible.length)];
-const randomSetTimeout = (min, max, f) => setTimeout(f, Math.random() * (max - min) + min);
 class FlippableCharacter extends React.PureComponent {
     render() {
         return (React.createElement("span", { className: 'flip-container ' + (this.props.flipped ? 'flipped' : '') },
@@ -43354,9 +43371,9 @@ class PageHeader extends React.Component {
         const text = this.title.split('').map((x, i) => {
             return React.createElement(FlippableCharacter, { key: i, original: x, new: i === this.state.oldIndex ? this.state.oldReplacement : this.state.replacement, flipped: this.props.active && i === this.state.index });
         });
-        return (React.createElement("header", { className: "page-header" },
+        return (React.createElement("header", { className: 'page-header' },
             React.createElement("h1", null,
-                React.createElement("a", { href: "." }, text))));
+                React.createElement("a", { href: '.' }, text))));
     }
     toggleActive(active) {
         clearInterval(this.interval);

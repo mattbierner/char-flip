@@ -55,14 +55,23 @@ const fetchTweetContent = async (authorId: string, statusId: string): Promise<Tw
         postDate = links[links.length - 1].textContent || ''
     }
 
+    const authorMatch = result.author_url.match(/\/([^\/]+?)$/);
+    if (!authorMatch) {
+        throw 'Invalid author'
+    }
+    const foundAuthorId = authorMatch[1]
+    if (authorId !== foundAuthorId) {
+        throw 'Found author id does not match tweet author id'
+    }
+
     return {
         text: body.textContent || '',
         metadata: {
             url: result.url,
-            authorId,
+            authorId: foundAuthorId,
             statusId,
             postDate,
-            authorName: result.author_name,
+            authorName: result.author_url,
             authorUrl: result.author_url
         }
     }

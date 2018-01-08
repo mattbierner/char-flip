@@ -30,3 +30,8 @@
     text-overflow: ellipsis;
     border-radius: 0;
 }
+
+.tweet-select-view .error {
+    color: red;
+    padding-bottom: 1em;
+}

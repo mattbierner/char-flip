@@ -1,12 +1,10 @@
 import * as React from 'react'
-import { setInterval } from 'timers';
+import { setInterval } from 'timers'
 
-const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
 
 const randomChar = () => possible[Math.floor(Math.random() * possible.length)]
 
-const randomSetTimeout = (min: number, max: number, f: () => void) =>
-    setTimeout(f, Math.random() * (max - min) + min)
 
 class FlippableCharacter extends React.PureComponent<{ original: string, new: string, flipped: boolean }> {
     render() {
@@ -68,8 +66,8 @@ export class PageHeader extends React.Component<PageHeaderProps, PageHeaderState
         })
 
         return (
-            <header className="page-header" >
-                <h1><a href=".">{text}</a></h1>
+            <header className='page-header' >
+                <h1><a href='.'>{text}</a></h1>
             </header>
         )
     }

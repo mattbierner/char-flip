@@ -18,6 +18,7 @@ const parseUrl = (url: string): { userId: string, statusId: string } | undefined
 }
 
 interface TweetSelectViewProps {
+    initialError?: string
     onDidSelectTweet(tweet: Tweet): void
 }
 
@@ -34,7 +35,7 @@ export class TweetSelectView extends React.Component<TweetSelectViewProps, Tweet
         this.state = {
             loading: false,
             value: exampleTweet,
-            error: undefined
+            error: props.initialError
         }
     }
 
@@ -48,7 +49,7 @@ export class TweetSelectView extends React.Component<TweetSelectViewProps, Tweet
 
                 <div className='tweet-selector'>
                     <h2>Enter tweet url</h2>
-                    <div>{this.state.error}</div>
+                    {this.state.error && <div className='error'>Error: ️{this.state.error}️️</div>}
                     {this.state.loading
                         ? <LoadingSpinner active={true} />
                         :
@@ -94,7 +95,10 @@ export class TweetSelectView extends React.Component<TweetSelectViewProps, Tweet
                 this.props.onDidSelectTweet(tweet)
             })
             .catch(() => {
-                this.setState({ loading: false, error: 'Could not load tweet' })
+                this.setState({
+                    loading: false,
+                    error: 'Could not load tweet. Please try again'
+                })
             })
     }
 }
