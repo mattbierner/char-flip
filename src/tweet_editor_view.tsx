@@ -59,10 +59,18 @@ interface TweetEditorViewProps {
 export class TweetEditorView extends React.Component<TweetEditorViewProps> {
     render() {
         return (
-            <div>
-                <div>
-                    <a href={this.props.tweet.metadata.authorUrl}>{this.props.tweet.metadata.authorName}</a> —
-                    <a href={this.props.tweet.metadata.url}>{this.props.tweet.metadata.postDate}</a>
+            <div className='tweet'>
+                <div className='tweet-header'>
+                    <div className='author'>
+                        <img className='author-image' src={this.props.tweet.userImageUrl} />
+                        <span className='author-name-and-id'>
+                            <a className='author-name' href={this.props.tweet.metadata.authorUrl}>{this.props.tweet.metadata.authorName}</a><br />
+                            <span className='author-id'>{this.props.tweet.metadata.authorId}</span>
+                        </span>
+                    </div>
+                    <div className='post'>
+                        <a href={this.props.tweet.metadata.url}>{this.props.tweet.metadata.postDate}</a>
+                    </div>
                 </div>
                 <TweetEditor
                     tweet={this.props.tweet}

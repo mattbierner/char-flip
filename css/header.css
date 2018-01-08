@@ -15,9 +15,3 @@ header nav a {
     display: block;
     padding: 0 1em;
 }
-
-@media (max-width: 1000px) {
-    header {
-        margin-bottom: 1.5em;
-    }
-}

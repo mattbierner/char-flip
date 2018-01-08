@@ -29786,11 +29786,16 @@ class Controls extends React.Component {
 }
 class TweetEditorView extends React.Component {
     render() {
-        return (React.createElement("div", null,
-            React.createElement("div", null,
-                React.createElement("a", { href: this.props.tweet.metadata.authorUrl }, this.props.tweet.metadata.authorName),
-                " \u2014",
-                React.createElement("a", { href: this.props.tweet.metadata.url }, this.props.tweet.metadata.postDate)),
+        return (React.createElement("div", { className: 'tweet' },
+            React.createElement("div", { className: 'tweet-header' },
+                React.createElement("div", { className: 'author' },
+                    React.createElement("img", { className: 'author-image', src: this.props.tweet.userImageUrl }),
+                    React.createElement("span", { className: 'author-name-and-id' },
+                        React.createElement("a", { className: 'author-name', href: this.props.tweet.metadata.authorUrl }, this.props.tweet.metadata.authorName),
+                        React.createElement("br", null),
+                        React.createElement("span", { className: 'author-id' }, this.props.tweet.metadata.authorId))),
+                React.createElement("div", { className: 'post' },
+                    React.createElement("a", { href: this.props.tweet.metadata.url }, this.props.tweet.metadata.postDate))),
             React.createElement(tweet_editor_1.TweetEditor, { tweet: this.props.tweet, onChangeTweet: this.props.onChangeTweet }),
             React.createElement(TweetDiffInfo, { tweet: this.props.tweet }),
             React.createElement(Controls, { tweet: this.props.tweet, onReset: () => this.onReset() })));
@@ -43179,6 +43184,9 @@ class Tweet {
     }
     static create(metadata, text) {
         return new Tweet(metadata, new symbol_string_1.SymbolString(text), undefined);
+    }
+    get userImageUrl() {
+        return `https://twitter.com/${this.metadata.authorId}/profile_image?size=bigger`;
     }
     get editedText() {
         if (!this.change) {

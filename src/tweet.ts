@@ -27,6 +27,10 @@ export class Tweet {
         public readonly change: Change | undefined
     ) { }
 
+    public get userImageUrl(): string {
+        return `https://twitter.com/${this.metadata.authorId}/profile_image?size=bigger`
+    }
+
     public get editedText(): SymbolString {
         if (!this.change) {
             return this.originalText

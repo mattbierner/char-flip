@@ -1,3 +1,9 @@
+.tweet {
+    background: #fff;
+    border-radius: 8px;
+    padding: 30px 40px;
+}
+
 .tweet-diff-info .diff-char {
     display: inline-block;
     width: 40px;
@@ -6,4 +12,39 @@
     vertical-align: middle;
     border-radius: 100px;
     background: #ccc;
+}
+
+.tweet-header {
+    display: flex;
+    flex-direction: row;
+}
+
+.tweet-header .author {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    text-align: left;
+    align-items: center;
+    padding-bottom: 1em;
+}
+
+.tweet-header .author-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 100px;
+    margin-right: 1em;
+}
+
+.tweet-header .author-name {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.tweet-header .author-id {
+    color: #aaa;
+    font-size: 0.9em;
+}
+
+.tweet-header .author-id:before {
+    content: "@";
 }
