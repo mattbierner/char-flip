@@ -40,7 +40,7 @@ const fetchTweetContent = async (authorId: string, statusId: string): Promise<Tw
     }
 
     const result = await jsonp(tweetOembedUrl).promise
-    console.log(result)
+
     // Trust that twitter done sanitized the tweet already :)
     const div = document.createElement('div')
     div.innerHTML = result.html

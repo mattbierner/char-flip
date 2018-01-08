@@ -68,6 +68,10 @@ export class PageHeader extends React.Component<PageHeaderProps, PageHeaderState
         return (
             <header className='page-header' >
                 <h1><a href='.'>{text}</a></h1>
+                <h2>
+                    One change<br />
+                    Make it count
+                </h2>
             </header>
         )
     }

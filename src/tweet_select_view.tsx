@@ -42,11 +42,6 @@ export class TweetSelectView extends React.Component<TweetSelectViewProps, Tweet
     render() {
         return (
             <div className='tweet-select-view'>
-                <h1>
-                    One change<br />
-                    Make it count
-                </h1>
-
                 <div className='tweet-selector'>
                     <h2>Enter tweet url</h2>
                     {this.state.error && <div className='error'>Error: ️{this.state.error}️️</div>}

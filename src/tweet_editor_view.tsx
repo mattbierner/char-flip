@@ -112,7 +112,7 @@ interface TweetEditorViewProps {
 export class TweetEditorView extends React.Component<TweetEditorViewProps> {
     render() {
         return (
-            <div className={'tweet ' + this.getLengthClass(this.props.tweet)}>
+            <div className='tweet'>
                 <TweetHeader tweet={this.props.tweet} />
 
                 <TweetEditor
@@ -130,14 +130,5 @@ export class TweetEditorView extends React.Component<TweetEditorViewProps> {
 
     private onReset(): void {
         this.props.onChangeTweet(this.props.tweet.reset())
-    }
-
-    private getLengthClass(tweet: Tweet) {
-        const len = tweet.originalText.symbols.length
-        if (len < 80) {
-            return 'len-80'
-        } else if (len < 160) {
-            return 'len-160'
-        }
     }
 }

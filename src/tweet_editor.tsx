@@ -26,12 +26,21 @@ const styleMap = {
 };
 
 export class TweetEditor extends React.Component<TweetProps, TweetState> {
+    escapeListener: void;
     constructor(props: TweetProps) {
         super(props)
 
         this.state = {
             editorState: EditorState.createWithContent(this.newContentForEdited(props.tweet))
         }
+    }
+
+    componentWillMount() {
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                this.onEscape()
+            }
+        })
     }
 
     componentWillReceiveProps(newProps: TweetProps) {

@@ -9050,7 +9050,6 @@ const fetchTweetContent = (authorId, statusId) => __awaiter(this, void 0, void 0
         throw 'invalid';
     }
     const result = yield jsonp(tweetOembedUrl).promise;
-    console.log(result);
     // Trust that twitter done sanitized the tweet already :)
     const div = document.createElement('div');
     div.innerHTML = result.html;
@@ -29738,10 +29737,6 @@ class TweetSelectView extends React.Component {
     }
     render() {
         return (React.createElement("div", { className: 'tweet-select-view' },
-            React.createElement("h1", null,
-                "One change",
-                React.createElement("br", null),
-                "Make it count"),
             React.createElement("div", { className: 'tweet-selector' },
                 React.createElement("h2", null, "Enter tweet url"),
                 this.state.error && React.createElement("div", { className: 'error' },
@@ -29872,7 +29867,7 @@ class Controls extends React.Component {
 }
 class TweetEditorView extends React.Component {
     render() {
-        return (React.createElement("div", { className: 'tweet ' + this.getLengthClass(this.props.tweet) },
+        return (React.createElement("div", { className: 'tweet' },
             React.createElement(TweetHeader, { tweet: this.props.tweet }),
             React.createElement(tweet_editor_1.TweetEditor, { tweet: this.props.tweet, onChangeTweet: this.props.onChangeTweet }),
             React.createElement("div", { className: 'tweet-footer' },
@@ -29880,15 +29875,6 @@ class TweetEditorView extends React.Component {
     }
     onReset() {
         this.props.onChangeTweet(this.props.tweet.reset());
-    }
-    getLengthClass(tweet) {
-        const len = tweet.originalText.symbols.length;
-        if (len < 80) {
-            return 'len-80';
-        }
-        else if (len < 160) {
-            return 'len-160';
-        }
     }
 }
 exports.TweetEditorView = TweetEditorView;
@@ -30049,6 +30035,13 @@ class TweetEditor extends React.Component {
         this.state = {
             editorState: draft_js_1.EditorState.createWithContent(this.newContentForEdited(props.tweet))
         };
+    }
+    componentWillMount() {
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                this.onEscape();
+            }
+        });
     }
     componentWillReceiveProps(newProps) {
         if (newProps.tweet !== this.props.tweet) {
@@ -43382,7 +43375,11 @@ class PageHeader extends React.Component {
         });
         return (React.createElement("header", { className: 'page-header' },
             React.createElement("h1", null,
-                React.createElement("a", { href: '.' }, text))));
+                React.createElement("a", { href: '.' }, text)),
+            React.createElement("h2", null,
+                "One change",
+                React.createElement("br", null),
+                "Make it count")));
     }
     toggleActive(active) {
         clearInterval(this.interval);

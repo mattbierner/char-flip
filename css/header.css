@@ -1,12 +1,18 @@
 header {
     font-family: 'VT323', monospace;
-    letter-spacing: 4px;
     font-size: 1.3rem;
     padding-top: 1.4em;
+    margin-bottom: 2rem;
 }
 
 header h1 {
     margin: 0;
+    letter-spacing: 4px;
+}
+
+header h2 {
+    color: var(--page-color);
+    font-size: 1.2rem;
 }
 
 header a,
@@ -62,5 +68,10 @@ header a:hover {
 @media (max-width: 800px) {
     header {
         font-size: 1rem;
+        margin-bottom: 1.2rem;
+    }
+
+    header h2 {
+        display: none;
     }
 }
