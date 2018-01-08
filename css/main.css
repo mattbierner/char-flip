@@ -1,4 +1,5 @@
 @import url('./header.css');
+@import url('./loading_spinner.css');
 @import url('./tweet_view.css');
 @import url('./tweet_select_view.css');
 
@@ -20,7 +21,7 @@ html {
     -webkit-font-smoothing: antialiased;
 }
 
-body {
+body, #main {
     min-height: 100%;
     margin: 0;
     display: flex;

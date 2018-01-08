@@ -102,27 +102,36 @@ class Main extends React.Component<{}, MainState> {
     }
 
     render() {
+        let body: any
         if (this.state.stage === Stage.SelectTweet) {
-            return (
+            body = (
                 <div className='content'>
                     <TweetSelectView
                         onDidSelectTweet={tweet => this.onUpdateTweet(tweet)} />
                 </div>
             )
-        }
-
-        if (this.state.stage === Stage.Editor) {
-            return (
+        } else if (this.state.stage === Stage.Editor) {
+            body = (
                 <div className='content'>
                     <TweetEditorView
                         tweet={this.state.tweet!}
                         onChangeTweet={tweet => this.onUpdateTweet(tweet)} />
                 </div>
             )
+        } else {
+            body = (
+                <div className='content'>Loading</div>
+            )
+
         }
 
         return (
-            <div className='content'>Loading</div>
+            <>
+            <header className="page-header">
+                <h1><a href=".">char flip</a></h1>
+            </header>
+            {body}
+            </>
         )
     }
 

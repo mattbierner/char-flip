@@ -31,7 +31,7 @@ interface ControlsProps {
 class Controls extends React.Component<ControlsProps, { copyLabel: string }> {
     private readonly standardCopyLabel = 'copy link'
 
-    private copyLabelTimer?: NodeJS.Timer;
+    private copyLabelTimer?: NodeJS.Timer
 
     constructor(props: ControlsProps) {
         super(props)

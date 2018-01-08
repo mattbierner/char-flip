@@ -11970,15 +11970,23 @@ class Main extends React.Component {
         }
     }
     render() {
+        let body;
         if (this.state.stage === Stage.SelectTweet) {
-            return (React.createElement("div", { className: 'content' },
+            body = (React.createElement("div", { className: 'content' },
                 React.createElement(tweet_select_view_1.TweetSelectView, { onDidSelectTweet: tweet => this.onUpdateTweet(tweet) })));
         }
-        if (this.state.stage === Stage.Editor) {
-            return (React.createElement("div", { className: 'content' },
+        else if (this.state.stage === Stage.Editor) {
+            body = (React.createElement("div", { className: 'content' },
                 React.createElement(tweet_editor_view_1.TweetEditorView, { tweet: this.state.tweet, onChangeTweet: tweet => this.onUpdateTweet(tweet) })));
         }
-        return (React.createElement("div", { className: 'content' }, "Loading"));
+        else {
+            body = (React.createElement("div", { className: 'content' }, "Loading"));
+        }
+        return (React.createElement(React.Fragment, null,
+            React.createElement("header", { className: "page-header" },
+                React.createElement("h1", null,
+                    React.createElement("a", { href: "." }, "char flip"))),
+            body));
     }
     onUpdateTweet(tweet) {
         this.setState({ tweet, stage: Stage.Editor });
@@ -29687,6 +29695,7 @@ module.exports = jsonp;
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(5);
 const tweet_fetcher_1 = __webpack_require__(47);
+const loading_spinner_1 = __webpack_require__(181);
 const exampleTweet = 'https://twitter.com/realDonaldTrump/status/949070800417640454';
 const parseUrl = (url) => {
     const match = url.match(/^https:\/\/twitter.com\/([^\\]+)\/status\/(\d+)$/);
@@ -29716,7 +29725,10 @@ class TweetSelectView extends React.Component {
             React.createElement("div", { className: 'tweet-selector' },
                 React.createElement("h2", null, "Enter tweet url"),
                 React.createElement("div", null, this.state.error),
-                React.createElement("input", { type: 'text', placeholder: exampleTweet, value: this.state.value, onChange: e => this.onChange(e), onKeyPress: e => this.onKeyPress(e) }))));
+                this.state.loading
+                    ? React.createElement(loading_spinner_1.LoadingSpinner, { active: true })
+                    :
+                        React.createElement("input", { type: 'text', placeholder: exampleTweet, value: this.state.value, onChange: e => this.onChange(e), onKeyPress: e => this.onKeyPress(e) }))));
     }
     onChange(event) {
         this.setState({
@@ -43267,6 +43279,22 @@ class Tweet {
     }
 }
 exports.Tweet = Tweet;
+
+
+/***/ }),
+/* 181 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(5);
+class LoadingSpinner extends React.Component {
+    render() {
+        return React.createElement("span", { className: "material-icons loading-spinner " + (this.props.active ? '' : 'hidden') }, "autorenew");
+    }
+}
+exports.LoadingSpinner = LoadingSpinner;
 
 
 /***/ })

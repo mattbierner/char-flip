@@ -2,6 +2,7 @@ import * as React from 'react'
 
 import { fetchTweet } from './tweet_fetcher'
 import { Tweet } from './tweet';
+import { LoadingSpinner } from './loading_spinner';
 
 const exampleTweet = 'https://twitter.com/realDonaldTrump/status/949070800417640454'
 
@@ -48,12 +49,15 @@ export class TweetSelectView extends React.Component<TweetSelectViewProps, Tweet
                 <div className='tweet-selector'>
                     <h2>Enter tweet url</h2>
                     <div>{this.state.error}</div>
-                    <input
-                        type='text'
-                        placeholder={exampleTweet}
-                        value={this.state.value}
-                        onChange={e => this.onChange(e)}
-                        onKeyPress={e => this.onKeyPress(e)} />
+                    {this.state.loading
+                        ? <LoadingSpinner active={true} />
+                        :
+                        <input
+                            type='text'
+                            placeholder={exampleTweet}
+                            value={this.state.value}
+                            onChange={e => this.onChange(e)}
+                            onKeyPress={e => this.onKeyPress(e)} />}
                 </div>
             </div>
         )
