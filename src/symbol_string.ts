@@ -29,17 +29,16 @@ export class SymbolString {
     }
 
     public toSymbolIndex(charIndex: number): SymbolIndex {
-        const characters = this.symbols
         let currentCharIndex = 0
         let symbolIndex = 0
-        for (const char of characters) {
-            if (charIndex < currentCharIndex + char.length) {
+        for (const symbol of this.symbols) {
+            if (charIndex < currentCharIndex + symbol.length) {
                 return SymbolIndex.create(symbolIndex)
             }
-            currentCharIndex += char.length
+            currentCharIndex += symbol.length
             ++symbolIndex
         }
 
-        return SymbolIndex.create(charIndex)
+        return SymbolIndex.create(currentCharIndex)
     }
 }

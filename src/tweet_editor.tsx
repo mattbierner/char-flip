@@ -94,8 +94,8 @@ export class TweetEditor extends React.Component<TweetProps, TweetState> {
         }
 
         const selection = editorState.getSelection()
-        const offset = this.props.tweet.editedText.toSymbolIndex(selection.getStartOffset())
-        const edited = this.props.tweet.flipAt(offset, chars)
+        const selectionOffset = this.props.tweet.editedText.toSymbolIndex(selection.getStartOffset())
+        const edited = this.props.tweet.flipAt(selectionOffset, chars)
 
         const newState = EditorState.acceptSelection(
             EditorState.createWithContent(this.newContentForEdited(edited, selection)),

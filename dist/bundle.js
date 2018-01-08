@@ -9117,17 +9117,16 @@ class SymbolString {
         return new SymbolString(this.symbols.slice(0, index.value).join('') + newSymbol + this.symbols.slice(index.value + 1).join(''));
     }
     toSymbolIndex(charIndex) {
-        const characters = this.symbols;
         let currentCharIndex = 0;
         let symbolIndex = 0;
-        for (const char of characters) {
-            if (charIndex < currentCharIndex + char.length) {
+        for (const symbol of this.symbols) {
+            if (charIndex < currentCharIndex + symbol.length) {
                 return SymbolIndex.create(symbolIndex);
             }
-            currentCharIndex += char.length;
+            currentCharIndex += symbol.length;
             ++symbolIndex;
         }
-        return SymbolIndex.create(charIndex);
+        return SymbolIndex.create(currentCharIndex);
     }
 }
 exports.SymbolString = SymbolString;
@@ -30051,8 +30050,8 @@ class TweetEditor extends React.Component {
             return 'handled';
         }
         const selection = editorState.getSelection();
-        const offset = this.props.tweet.editedText.toSymbolIndex(selection.getStartOffset());
-        const edited = this.props.tweet.flipAt(offset, chars);
+        const selectionOffset = this.props.tweet.editedText.toSymbolIndex(selection.getStartOffset());
+        const edited = this.props.tweet.flipAt(selectionOffset, chars);
         const newState = draft_js_1.EditorState.acceptSelection(draft_js_1.EditorState.createWithContent(this.newContentForEdited(edited, selection)), selection);
         this.setState({ editorState: newState });
         this.props.onChangeTweet(edited);
