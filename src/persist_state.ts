@@ -47,21 +47,23 @@ export class PersistedState {
 
     public static persist(tweet: Tweet): void {
         try {
-            replaceQueryString(PersistedState.getUrl(tweet))
+            replaceQueryString(PersistedState.getQueryString(tweet))
         } catch {
             // noop
         }
     }
 
     public static getUrl(tweet: Tweet) {
-        const qs = queryString.stringify({
+        return window.location.pathname + '?' + PersistedState.getQueryString(tweet)
+    }
+
+    public static getQueryString(tweet: Tweet): string {
+        return queryString.stringify({
             version: PersistedState.currentVersion,
             authorId: tweet.metadata.authorId,
             statusId: tweet.metadata.statusId,
             offset: tweet.change ? tweet.change.offset.value : undefined,
             insertion: tweet.change ? tweet.change.insertion : undefined
         })
-
-        return window.location.pathname + '?' + qs
     }
 }
