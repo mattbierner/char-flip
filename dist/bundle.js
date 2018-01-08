@@ -29833,7 +29833,7 @@ class Controls extends React.Component {
             return;
         }
         copy(window.location);
-        this.setState({ copyLabel: 'copied link to tweet' });
+        this.setState({ copyLabel: 'copied link to clipboard' });
         if (this.copyLabelTimer) {
             clearTimeout(this.copyLabelTimer);
         }
@@ -43251,7 +43251,7 @@ class Tweet {
         return new Tweet(metadata, new symbol_string_1.SymbolString(text), undefined);
     }
     get userImageUrl() {
-        return `https://twitter.com/${this.metadata.authorId}/profile_image?size=bigger`;
+        return `https://avatars.io/twitter/${this.metadata.authorId}`;
     }
     get editedText() {
         if (!this.change) {

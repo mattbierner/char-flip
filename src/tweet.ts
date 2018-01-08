@@ -28,7 +28,7 @@ export class Tweet {
     ) { }
 
     public get userImageUrl(): string {
-        return `https://twitter.com/${this.metadata.authorId}/profile_image?size=bigger`
+        return `https://avatars.io/twitter/${this.metadata.authorId}`
     }
 
     public get editedText(): SymbolString {

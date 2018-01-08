@@ -90,7 +90,7 @@ class Controls extends React.Component<ControlsProps, { copyLabel: string }> {
         }
 
         copy(window.location)
-        this.setState({ copyLabel: 'copied link to tweet' })
+        this.setState({ copyLabel: 'copied link to clipboard' })
 
         if (this.copyLabelTimer) {
             clearTimeout(this.copyLabelTimer)

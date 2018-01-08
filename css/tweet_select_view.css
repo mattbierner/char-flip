@@ -28,4 +28,5 @@
     font-size: 1em;
     outline: none;
     text-overflow: ellipsis;
+    border-radius: 0;
 }
