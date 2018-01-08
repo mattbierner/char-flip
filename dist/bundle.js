@@ -11901,6 +11901,7 @@ const tweet_fetcher_1 = __webpack_require__(47);
 const tweet_select_view_1 = __webpack_require__(88);
 const tweet_editor_view_1 = __webpack_require__(89);
 const symbol_string_1 = __webpack_require__(179);
+const header_1 = __webpack_require__(182);
 var Stage;
 (function (Stage) {
     Stage[Stage["Initial"] = 0] = "Initial";
@@ -11983,9 +11984,7 @@ class Main extends React.Component {
             body = (React.createElement("div", { className: 'content' }, "Loading"));
         }
         return (React.createElement(React.Fragment, null,
-            React.createElement("header", { className: "page-header" },
-                React.createElement("h1", null,
-                    React.createElement("a", { href: "." }, "char flip"))),
+            React.createElement(header_1.PageHeader, null),
             body));
     }
     onUpdateTweet(tweet) {
@@ -43295,6 +43294,28 @@ class LoadingSpinner extends React.Component {
     }
 }
 exports.LoadingSpinner = LoadingSpinner;
+
+
+/***/ }),
+/* 182 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(5);
+class PageHeader extends React.Component {
+    constructor() {
+        super(...arguments);
+        this.title = 'char flip';
+    }
+    render() {
+        return (React.createElement("header", { className: "page-header" },
+            React.createElement("h1", null,
+                React.createElement("a", { href: "." }, this.title))));
+    }
+}
+exports.PageHeader = PageHeader;
 
 
 /***/ })

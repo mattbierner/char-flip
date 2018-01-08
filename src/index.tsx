@@ -7,6 +7,7 @@ import { Tweet } from './tweet';
 import { TweetSelectView } from './tweet_select_view';
 import { TweetEditorView } from './tweet_editor_view';
 import { SymbolIndex } from './symbol_string';
+import { PageHeader } from './header';
 
 enum Stage {
     Initial,
@@ -127,9 +128,7 @@ class Main extends React.Component<{}, MainState> {
 
         return (
             <>
-            <header className="page-header">
-                <h1><a href=".">char flip</a></h1>
-            </header>
+            <PageHeader />
             {body}
             </>
         )
