@@ -4,7 +4,7 @@
 
 
 # About
-*char-flip* is experiment that lets you flip a single character in a tweet. With the right flip, the result can be highly entertaining.
+*char-flip* is experiment that lets you flip a single character in a tweet. The right flip can have entertaining results.
 
 ![](images/example.png)
 
@@ -18,15 +18,17 @@ To get started, head over to [the site](https://mattbierner.github.io/char-flip/
 
 Click on the tweet text to place the cursor and move about like in a standard text editor. You can only change a single character at a time:
 
-> > **💡 Tip**: You can insert Emoji and other symbols as well
+> **💡 Tip**: You can insert Emoji and other symbols as well
 
 ![](images/change.png)
 
 The current cursor position is outlined in gray. The currently changed character is highlighted in green.
 
-After making your change, share your work with the current page url
+> **💡 Tip**: Use space to 'erase' a character or cleverly split a word
 
-> > **💡 Tip**: Use space to 'erase' a character or cleverly split a word
+After making your flip, share your work using the current page url.
+ You can[Let me know](https://twitter.com/mattbierner/) what you create
+
 
 # Building
 The site uses typescript and webpack. To build:
