@@ -1,9 +1,8 @@
 import * as React from 'react'
-import { setInterval } from 'timers'
 
-const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+const possibleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
 
-const randomChar = () => possible[Math.floor(Math.random() * possible.length)]
+const randomChar = () => possibleChars[Math.floor(Math.random() * possibleChars.length)]
 
 
 class FlippableCharacter extends React.PureComponent<{ originalChar: string, newChar: string, flipped: boolean }> {
