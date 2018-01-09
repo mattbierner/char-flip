@@ -87,6 +87,7 @@
     padding: 1.6em;
     border-left: 2px solid var(--background-color);
     outline: none;
+    margin: 0;
 }
 
 .controls button:first-child {
