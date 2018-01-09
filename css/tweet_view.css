@@ -132,10 +132,6 @@
 }
 
 @media (max-width: 800px) {
-    .tweet {
-        margin-top: 2rem;
-    }
-
     .tweet > * {
         padding: 0 20px;
     }
