@@ -16,12 +16,17 @@ To get started, head over to [the site](https://mattbierner.github.io/char-flip/
 
 ![](images/loaded.png)
 
-Click on the tweet text to place the cursor and move about like in a standard text editor. You can only change a single character at a time. The the current cursor position is outlined. Currently changed character is highlighted in green:
+Click on the tweet text to place the cursor and move about like in a standard text editor. You can only change a single character at a time:
 
 ![](images/change.png)
 
+> **Tip**: You can insert Emoji and other symbols as well
+
+The current cursor position is outlined in gray. The currently changed character is highlighted in green.
+
 After making your change, share your work with the current page url
 
+> **Tip**: Use space to 'erase' a character or cleverly split a word
 
 # Building
 The site uses typescript and webpack. To build:
