@@ -27,7 +27,7 @@ The current cursor position is outlined in gray. The currently changed character
 > **💡 Tip**: Use space to 'erase' a character or cleverly split a word
 
 After making your flip, share your work using the current page url.
- You can[Let me know](https://twitter.com/mattbierner/) what you create
+[Let me know](https://twitter.com/mattbierner/) what you create
 
 
 # Building
