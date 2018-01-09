@@ -17,7 +17,7 @@
 }
 
 #site-footer nav {
-    max-width: 200px;
+    max-width: 300px;
     display: flex;
     flex-direction: row;
     margin: 0 auto;
