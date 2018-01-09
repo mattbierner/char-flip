@@ -54,7 +54,7 @@ export class PersistedState {
     }
 
     public static getUrl(tweet: Tweet) {
-        return window.location.pathname + '?' + PersistedState.getQueryString(tweet)
+        return window.location.origin + window.location.pathname + '?' + PersistedState.getQueryString(tweet)
     }
 
     public static getQueryString(tweet: Tweet): string {

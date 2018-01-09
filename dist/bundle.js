@@ -12189,7 +12189,7 @@ class PersistedState {
         }
     }
     static getUrl(tweet) {
-        return window.location.pathname + '?' + PersistedState.getQueryString(tweet);
+        return window.location.origin + window.location.pathname + '?' + PersistedState.getQueryString(tweet);
     }
     static getQueryString(tweet) {
         return queryString.stringify({
